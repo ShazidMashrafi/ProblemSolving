@@ -1,43 +1,57 @@
-# 🏆 Competitive Programming Toolkit
+# 🚀 Competitive Programming Toolkit
 
-This repository contains my essential tools and configurations for competitive programming:
+## 🛠️ What's Inside
 
-- **Templates**: Pre-optimized C++ templates for various algorithm categories
-- **Debuggers**: Custom debugging utilities to quickly identify issues
-- **VSCode Setup**: Configurations, snippets, and settings for efficient coding
-- **Stress Testing**: Tools to test solutions against brute force approaches
+This repository houses my curated collection of tools and configurations for competitive programming:
 
-> **Note**: These resources have been collected from various sources across the internet, merged together, and personally tweaked to enhance my workflow.
+- **📝 Templates** - Pre-optimized C++ templates for various algorithm categories
+- **🔍 Debuggers** - Custom debugging utilities for rapid issue identification
+- **⚙️ VSCode Setup** - Specialized configurations, snippets, and settings
+- **🧪 Stress Testing** - Tools to validate solutions against brute force approaches
 
-## 📑 My Online Judge Solutions
+> 💡 **Note**: These resources are gathered from across the internet, merged, and personally customized to enhance my competitive programming workflow.
 
-My solutions are organized in separate repositories:
+## 📚 My Online Judge Solutions
 
-|  #  | Online Judge | My Profile |
-| :-: | :----------- | :--------- |
-| 1 | [AtCoder](https://github.com/ShazidMashrafi/AtCoder) | [My Account](https://atcoder.jp/users/shazidmashrafi) |
-| 2 | [Beecrowd](https://github.com/ShazidMashrafi/Beecrowd) | [My Account](https://judge.beecrowd.com/en/profile/790252) |
-| 3 | [CodeChef](https://github.com/ShazidMashrafi/CodeChef) | [My Account](https://www.codechef.com/users/shazidmashrafi) |
-| 4 | [Codeforces](https://github.com/ShazidMashrafi/Codeforces) | [My Account](https://codeforces.com/profile/ShazidMashrafi) |
-| 5 | [Code360](https://github.com/ShazidMashrafi/Code360) | [My Account](https://www.naukri.com/code360/profile/ShazidMashrafi) |
-| 6 | [CSES](https://github.com/ShazidMashrafi/CSES) | [My Account](https://cses.fi/user/238576) |
-| 7 | [Geeks For Geeks](https://github.com/ShazidMashrafi/GFG) | [My Account](https://www.geeksforgeeks.org/user/shazidmashrafi/) |
-| 8 | [HackerEarth](https://github.com/ShazidMashrafi/HackerEarth) | [My Account](https://www.hackerearth.com/@shazidmashrafi/) |
-| 9 | [HackerRank](https://github.com/ShazidMashrafi/HackerRank) | [My Account](https://www.hackerrank.com/profile/shazidmashrafi) |
-| 10 | [Kattis](https://github.com/ShazidMashrafi/Kattis) | [My Account](https://open.kattis.com/users/shazid-mashrafi) |
-| 11 | [LeetCode](https://github.com/ShazidMashrafi/LeetCode) | [My Account](https://leetcode.com/u/shazidmashrafi/) |
-| 12 | [LightOJ](https://github.com/ShazidMashrafi/LightOJ) | [My Account](https://lightoj.com/user/shazidmashrafi) |
-| 13 | [SPOJ](https://github.com/ShazidMashrafi/SPOJ) | [My Account](https://www.spoj.com/users/shazidmashrafi) |
-| 14 | [Toph](https://github.com/ShazidMashrafi/Toph) | [My Account](https://toph.co/u/ShazidMashrafi) |
-| 15 | [UVA](https://github.com/ShazidMashrafi/UVA) | [My Account](#) |
+<details open>
+<summary><b>Solution Repositories</b></summary>
+<br>
 
+| Platform | Repository | Profile |
+|:--------:|:----------:|:-------:|
+| ![AtCoder](https://img.shields.io/badge/AtCoder-🟢-success) | [Repo](https://github.com/ShazidMashrafi/AtCoder) | [Profile](https://atcoder.jp/users/shazidmashrafi) |
+| ![Beecrowd](https://img.shields.io/badge/Beecrowd-🔵-blue) | [Repo](https://github.com/ShazidMashrafi/Beecrowd) | [Profile](https://judge.beecrowd.com/en/profile/790252) |
+| ![CodeChef](https://img.shields.io/badge/CodeChef-🟤-brown) | [Repo](https://github.com/ShazidMashrafi/CodeChef) | [Profile](https://www.codechef.com/users/shazidmashrafi) |
+| ![Codeforces](https://img.shields.io/badge/Codeforces-🔴-red) | [Repo](https://github.com/ShazidMashrafi/Codeforces) | [Profile](https://codeforces.com/profile/ShazidMashrafi) |
+| ![Code360](https://img.shields.io/badge/Code360-⚫-black) | [Repo](https://github.com/ShazidMashrafi/Code360) | [Profile](https://www.naukri.com/code360/profile/ShazidMashrafi) |
+| ![CSES](https://img.shields.io/badge/CSES-🟣-purple) | [Repo](https://github.com/ShazidMashrafi/CSES) | [Profile](https://cses.fi/user/238576) |
+| ![GFG](https://img.shields.io/badge/GeeksForGeeks-🟢-success) | [Repo](https://github.com/ShazidMashrafi/GFG) | [Profile](https://www.geeksforgeeks.org/user/shazidmashrafi/) |
+| ![HackerEarth](https://img.shields.io/badge/HackerEarth-🔵-blue) | [Repo](https://github.com/ShazidMashrafi/HackerEarth) | [Profile](https://www.hackerearth.com/@shazidmashrafi/) |
+| ![HackerRank](https://img.shields.io/badge/HackerRank-🟢-success) | [Repo](https://github.com/ShazidMashrafi/HackerRank) | [Profile](https://www.hackerrank.com/profile/shazidmashrafi) |
+| ![Kattis](https://img.shields.io/badge/Kattis-🟠-orange) | [Repo](https://github.com/ShazidMashrafi/Kattis) | [Profile](https://open.kattis.com/users/shazid-mashrafi) |
+| ![LeetCode](https://img.shields.io/badge/LeetCode-🟡-yellow) | [Repo](https://github.com/ShazidMashrafi/LeetCode) | [Profile](https://leetcode.com/u/shazidmashrafi/) |
+| ![LightOJ](https://img.shields.io/badge/LightOJ-🔵-blue) | [Repo](https://github.com/ShazidMashrafi/LightOJ) | [Profile](https://lightoj.com/user/shazidmashrafi) |
+| ![SPOJ](https://img.shields.io/badge/SPOJ-⚪-lightgrey) | [Repo](https://github.com/ShazidMashrafi/SPOJ) | [Profile](https://www.spoj.com/users/shazidmashrafi) |
+| ![Toph](https://img.shields.io/badge/Toph-🟣-purple) | [Repo](https://github.com/ShazidMashrafi/Toph) | [Profile](https://toph.co/u/ShazidMashrafi) |
+| ![UVA](https://img.shields.io/badge/UVA-🔴-red) | [Repo](https://github.com/ShazidMashrafi/UVA) | [Profile](#) |
 
-## 🚀 About Me
+</details>
 
-I am Shazid Mashrafi, a Computer Science and Engineering student passionate about competitive programming.
+## 👨‍💻 About Me
 
-Visit my [Website](https://shazidmashrafi.com)
+<div align="center">
+  <img src="https://avatars.githubusercontent.com/u/90213199?v=4" width="150px" style="border-radius:50%">
+  <h3>Shazid Mashrafi</h3>
+  <p>Student | Competitive Programmer | Techie</p>
+  
+  [![Website](https://img.shields.io/badge/Website-Visit-brightgreen)](https://shazidmashrafi.com)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/shazidmashrafi/)
+  [![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2)](https://twitter.com/ShazidMashrafi)
+</div>
 
 ---
 
-#### If this repository helped you, please consider giving it a ⭐
+<div align="center">
+  <p>⭐ <b>If this repository helped you, please consider giving it a star!</b> ⭐</p>
+  <p>Happy Coding! 💻</p>
+</div>
