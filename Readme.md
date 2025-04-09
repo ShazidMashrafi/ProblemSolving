@@ -17,7 +17,7 @@ This repository houses my curated collection of tools and configurations for com
 <summary><b>Solution Repositories</b></summary>
 <br>
 
-| Platform | Repository | Profile |
+| Platform | Repository | My Account |
 |:--------:|:----------:|:-------:|
 | ![AtCoder](https://img.shields.io/badge/AtCoder-🟢-success) | [Repo](https://github.com/ShazidMashrafi/AtCoder) | [Profile](https://atcoder.jp/users/shazidmashrafi) |
 | ![Beecrowd](https://img.shields.io/badge/Beecrowd-🔵-blue) | [Repo](https://github.com/ShazidMashrafi/Beecrowd) | [Profile](https://judge.beecrowd.com/en/profile/790252) |
