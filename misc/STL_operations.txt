@@ -1,0 +1,149 @@
+vector<int> v;
+// Operations                   // Time Complexity
+v.push_back(x)                  // O(1)
+v.pop_back()                    // O(1)
+v.size()                        // O(1)
+v.empty()                       // O(1)
+v.clear()                       // O(n)
+v.front()                       // O(1)
+v.back()                        // O(1)
+v.begin(), v.end()              // O(1)
+v.erase(iterator)               // O(n)
+v.erase(start_iter, end_iter)   // O(n)
+v.insert(iterator, x)           // O(n)
+v[i]                            // O(1)
+
+list<int> l;
+// Operations                   // Time Complexity
+l.push_back(x)                  // O(1)
+l.push_front(x)                 // O(1)
+l.pop_back()                    // O(1)
+l.pop_front()                   // O(1)
+l.size()                        // O(1)
+l.empty()                       // O(1)
+l.clear()                       // O(n)
+l.begin(), l.end()              // O(1)
+l.insert(iterator, x)           // O(1)
+l.erase(iterator)               // O(1)
+
+// Max Heap
+priority_queue<int> pq;
+// Min Heap
+priority_queue<int, vector<int>, greater<int>> pq;
+// Operations                   // Time Complexity
+pq.push(x)                      // O(log n)
+pq.pop()                        // O(log n)
+pq.top()                        // O(1)
+pq.empty()                      // O(1)
+
+set<int> s;
+// Operations                   // Time Complexity
+s.insert(x)                     // O(log n)
+s.erase(x)                      // O(log n)
+s.erase(iterator)               // O(1)
+s.find(x)                       // O(log n)
+s.count(x)                      // O(log n)
+s.empty()                       // O(1)
+s.clear()                       // O(n)
+s.lower_bound(x)                // O(log n)
+s.upper_bound(x)                // O(log n)
+
+map<string, int> m;
+// Operations                   // Time Complexity
+m[key] = value                  // O(log n)
+m.insert({key, value})          // O(log n)
+m.erase(key)                    // O(log n)
+m.find(key)                     // O(log n)
+m.count(key)                    // O(log n)
+m.empty()                       // O(1)
+m.clear()                       // O(n)
+m.lower_bound(key)              // O(log n)
+m.upper_bound(key)              // O(log n)
+
+unordered_set<int> us;
+// Operations           // Average      // Worst
+us.insert(x)            // O(1)         // O(n)
+us.erase(x)             // O(1)         // O(n)
+us.find(x)              // O(1)         // O(n)
+us.count(x)             // O(1)         // O(n)
+
+unordered_map<string, int> um;
+// Operations           // Average      // Worst
+um[key] = value         // O(1)         // O(n)
+um.insert({key, value}) // O(1)         // O(n)
+ um.erase(key)          // O(1)         // O(n)
+um.find(key)            // O(1)         // O(n)
+um.count(key)           // O(1)         // O(n)
+
+stack<int> st;
+// Operations                   // Time Complexity
+st.push(x)                      // O(1)
+st.pop()                        // O(1)
+st.top()                        // O(1)
+st.size()                       // O(1)
+st.empty()                      // O(1)
+
+queue<int> q;
+// Operations                   // Time Complexity
+q.push(x)                       // O(1)
+q.pop()                         // O(1)
+q.front()                       // O(1)
+q.back()                        // O(1)
+q.size()                        // O(1)
+q.empty()                       // O(1)
+
+deque<int> d;
+// Operations                   // Time Complexity
+d.push_back(x)                  // O(1)
+d.push_front(x)                 // O(1)
+d.pop_back()                    // O(1)
+d.pop_front()                   // O(1)
+d.front()                       // O(1)
+d.back()                        // O(1)
+d[i]                            // O(1)
+d.size()                        // O(1)
+d.empty()                       // O(1)
+
+string s;
+string s1 = "Hello";           // Direct initialization, O(n)
+string s2(5, 'a');             // Creates "aaaaa", O(n)
+string s3(s1);                 // Copy constructor, O(n)
+// Access
+s1.empty();                    // Checks if string is empty, O(1)
+s1.at(2);                      // Same, but with bounds checking, O(1)
+// Modification
+s1 += "World";                 // Concatenation, O(n+m)
+s1.append("World");            // Another way to concatenate, O(n+m)
+s1.push_back('!');             // Add single character, O(1) amortized
+s1.pop_back();                 // Remove last character, O(1)
+// Substring and Slicing
+s1.substr(0, 3);               // Substring, size 3 from index 0, O(k)
+s1.substr(2);                  // Substring from index 2 to end, O(n)
+// Search
+s1.find("Hello");              // Find substring, returns index, O(n*m)
+s1.rfind("Hello");             // Find from right side, O(n*m)
+s1.find_first_of("aeiou");     // Find first vowel, O(n*m)
+s1.find_last_of("aeiou");      // Find last vowel, O(n*m)
+// Comparison
+s1.compare(s2);                // Compare strings, O(n)
+s1 == s2;                      // Equality comparison, O(n)
+s1 < s2;                       // Lexicographic comparison, O(n)
+// Insert and Erase
+s1.insert(2, "abc");           // Insert substring at index 2, O(n)
+s1.erase(2, 3);                // Erase 3 characters from index 2, O(n)
+// Replace
+s1.replace(2, 3, "xyz");       // Replace 3 chars from index 2, O(n)
+// Conversion
+stoi(s1);                      // String to integer, O(n)
+to_string(42);                 // Integer to string, O(log(number))
+// Modify Case
+transform(s1.begin(), s1.end(), s1.begin(), ::tolower);  // To lowercase, O(n)
+transform(s1.begin(), s1.end(), s1.begin(), ::toupper);  // To uppercase, O(n)
+// Trim
+s1.erase(0, s1.find_first_not_of(" \t")); // Left trim, O(n)
+s1.erase(s1.find_last_not_of(" \t") + 1); // Right trim, O(n)
+// Copying
+s2.assign(s1);                 // Assign one string to another, O(n)
+// Clear
+s1.clear();                    // Make string empty, O(1)
+
