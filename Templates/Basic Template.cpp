@@ -2,7 +2,7 @@
 using namespace std;
 #define ll long long
 #define endl '\n'
-ll power(ll x,ll y,ll m=1e9+7){ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;x=(x*x)%m;y>>=1;}return ans;}
+ll power(ll x,ll y,ll m=LLONG_MAX){ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;x=(x*x)%m;y>>=1;}return ans;}
 
 void solve()
 {
