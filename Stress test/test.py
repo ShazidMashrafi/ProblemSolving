@@ -1,9 +1,9 @@
 import os
 import subprocess
 import filecmp
-subprocess.run(["g++", "correct.cpp", "-o", "correct"], check=True)
-subprocess.run(["g++", "gen.cpp", "-o", "gen"], check=True)
-subprocess.run(["g++", "wrong.cpp", "-o", "wrong"], check=True)
+subprocess.run(["g++", "correct.cpp", "-o", "correct", "-DONLINEJUDGE"], check=True)
+subprocess.run(["g++", "gen.cpp", "-o", "gen", "-DONLINEJUDGE"], check=True)
+subprocess.run(["g++", "wrong.cpp", "-o", "wrong", "-DONLINEJUDGE"], check=True)
 
 i = 1
 while True:

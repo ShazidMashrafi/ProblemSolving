@@ -1,7 +1,7 @@
 set -e
-g++ correct.cpp -o correct
-g++ gen.cpp -o gen
-g++ wrong.cpp -o wrong
+g++ correct.cpp -o correct -DONLINEJUDGE
+g++ gen.cpp -o gen -DONLINEJUDGE
+g++ wrong.cpp -o wrong -DONLINEJUDGE
 for((i = 1; ; ++i)); do
     ./gen $i > input_file
     ./correct < input_file > wrongAnswer
