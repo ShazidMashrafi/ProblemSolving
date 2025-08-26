@@ -1,3 +1,5 @@
-correct.cpp
-gen.cpp
-wrong.cpp
+*
+!.gitignore
+!test.sh
+!test.py
+!test.bat

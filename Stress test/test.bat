@@ -2,9 +2,9 @@
 setlocal enabledelayedexpansion
 
 :: Compile the C++ files
-g++ correct.cpp -o correct.exe -DONLINEJUDGE
-g++ gen.cpp -o gen.exe -DONLINEJUDGE
-g++ wrong.cpp -o wrong.exe -DONLINEJUDGE
+g++ correct.cpp -o correct.exe -DONLINE_JUDGE -std=c++20
+g++ gen.cpp -o gen.exe -DONLINE_JUDGE -std=c++20
+g++ wrong.cpp -o wrong.exe -DONLINE_JUDGE -std=c++20
 
 :: Initialize the test counter
 set /a i=1
