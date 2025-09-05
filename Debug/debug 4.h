@@ -25,4 +25,4 @@ namespace debugger {
     }
 }
 
-#define dbg(...) cerr << __LINE__ << ": ", d::pr(#__VA_ARGS__,__VA_ARGS__)
+#define dbg(...) cerr << __LINE__ << ": ", debugger::pr(#__VA_ARGS__,__VA_ARGS__)
