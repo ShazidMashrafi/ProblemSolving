@@ -23,7 +23,7 @@ ll power(ll x,ll y,ll m=LLONG_MAX) {ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;
 
 void solve()
 {
-    cout << "Mara khaw" << endl;
+    
 }
 
 signed main()
