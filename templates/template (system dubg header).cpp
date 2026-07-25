@@ -1,11 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
-#ifdef ONLINE_JUDGE
-#define dbg(...)
-#else
+#if defined(LOCAL) && !defined(ONLINE_JUDGE)
 #include <debug.h>
+#else
+#define dbg(...)
 #endif
-#define  int  long long
 #define  ll  long long
 #define  endl  '\n'
 #define  ff  first

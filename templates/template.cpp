@@ -1,9 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
-#ifdef ONLINE_JUDGE
-#define dbg(...)
+#if defined(LOCAL) && !defined(ONLINE_JUDGE)
+#include "debug.h"
 #else
-#include <debug.h>
+#define dbg(...)
 #endif
 #define  ll  long long
 #define  endl  '\n'
