@@ -1,21 +1,30 @@
-vector<vector<int>>adj;
-vector<int>color;
-bool dfs(int curr, int col) {
-    color[curr] = col;
-    for(auto i: adj[curr]) {
-        if(color[i] == -1) {
-            if(!dfs(i, col^1)) { // if false for next vertex
-                return false;
-            }
-        } else {
-            if(color[curr] == color[i]) return false;
+const int N = 1e5 + 10;
+vector<int> g[N];
+int color[N]; // -1: uncolored
+int n, m;
+
+bool dfs(int u, int c = 0) {
+    color[u] = c;
+    for (int v : g[u]) {
+        if (color[v] == -1) {
+            if (!dfs(v, c ^ 1)) return false;
+        } else if (color[v] == color[u]) {
+            return false;
         }
     }
     return true;
 }
-void Bipartite_Graph_Coloring() {
-    // adj.resize(n+1, vector<int>()); -> in solve
-    // color.assign(n+1, -1);-> in solve
-    if(dfs(1, 0)) cout<<"Bipartite\n";
-    else cout<<"Not Bipartite\n";
+
+int main() {
+    // take input of graph.
+    memset(color, -1, sizeof(color));
+
+    bool ok = true;
+    for (int i = 1; i <= n; ++i) {
+        if (color[i] == -1 && !dfs(i, 0)) {
+            ok = false;
+            break;
+        }
+    }
+    cout << (ok ? "YES" : "NO") << "\n";
 }

@@ -1,106 +1,33 @@
-const int N = 1e3+10;
-const int MAX = 1e9+10;
+const int N = 1005;
+int dist[N][N];
+int n, m;
 
-int val[N][N];
-int vis[N][N];
-int level[N][N];
-int n,m;
+int dx[] = {0, 0, 1, -1, 1, 1, -1, -1}; // first 4 for 4-dir
+int dy[] = {1, -1, 0, 0, 1, -1, 1, -1};
 
-vector<pair<int,int>>moves = {
-    {0,1}, {0,-1}, {1,0}, {-1,0},
-    {1,1}, {1,-1}, {-1,1}, {-1,-1}
-};
-
-bool valid(int i, int j)
-{
-    return i>=0 && j>=0 && i<n && j<m;
+bool valid(int x, int y) {
+    return x >= 0 && x < n && y >= 0 && y < m;
 }
 
-int bfs()
-{   
-    int mx=0;
-    for(int i=0; i<n; ++i)
-    {
-        for(int j=0; j<m; ++j)
-            mx=max(mx,val[i][j]);
+void multi_source_bfs(const vector<pair<int, int>>& sources) {
+    memset(dist, -1, sizeof(dist));
+    queue<pair<int, int>> q;
+
+    for (auto [x, y] : sources) {
+        dist[x][y] = 0;
+        q.push({x, y});
     }
-    queue<pair<int,int>> q;
-    for(int i=0; i<n; ++i)
-    {
-        for(int j=0; j<m; ++j)
-        {
-            if(mx==val[i][j])
-            {
-                q.push({i,j});
-                level[i][j]=0;
-                vis[i][j]=1;
-            }
-        }
-    }
-    int ans = 0;
-    while(!q.empty())
-    {
-        auto v =  q.front();
-        int vx = v.first;
-        int vy = v.second;
+
+    while (!q.empty()) {
+        auto [x, y] = q.front();
         q.pop();
-        for(auto move:moves)
-        {
-            int x = move.first + vx;
-            int y = move.second + vy;
-            if(valid(x,y) && !vis[x][y])
-            {
-                q.push({x,y});
-                level[x][y]=level[vx][vy]+1;
-                vis[x][y]=1;
-                ans = max(ans,level[x][y]);
+
+        for (int i = 0; i < 4; ++i) { // change 4 to 8 for 8-dir
+            int nx = x + dx[i], ny = y + dy[i];
+            if (valid(nx, ny) && dist[nx][ny] == -1) {
+                dist[nx][ny] = dist[x][y] + 1;
+                q.push({nx, ny});
             }
         }
-    }
-    return ans;
-}
-
-void reset()
-{
-    for(int i=0; i<n; ++i)
-    {
-        for(int j=0; j<m; ++j)
-        {
-            vis[i][j] = 0;
-            level[i][j] = MAX;
-        }
-    }
-}
-
-void solve()
-{
-    cin>>n>>m;
-    reset();
-    for(int i=0; i<n; ++i)
-    {
-        for(int j=0; j<m; ++j)
-        {    
-            cin >> val[i][j];
-        }
-    }
-    cout<<bfs()<<endl;
-}
-
-int main()
-{
-    int TC;
-    cin >> TC;
-    while (TC--) 
-    {
-        cin>>n>>m;
-        reset();
-        for(int i=0; i<n; ++i)
-        {
-            for(int j=0; j<m; ++j)
-            {    
-                cin >> val[i][j];
-            }
-        }
-        cout<<bfs()<<endl;
     }
 }

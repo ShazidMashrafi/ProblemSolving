@@ -1,46 +1,24 @@
-const int N = 1e5+10;
-const int INF = 1e9+10;
-vector<pair<int,int>>g[N];
-vector<int>level(N,INF);
-int n,m;
-int bfs()
-{
-    deque<int>q;
-    q.push_back(1);
-    level[1]=0;
-    while(!q.empty())
-    {
-        int vertex = q.front();
-        q.pop_front();
+const int N = 1e5 + 10;
+const int INF = 1e9 + 10;
+vector<pair<int, int>> g[N]; // {neighbor, weight}
+int dist[N];
 
-        for(auto child : g[vertex])
-        {
-            int v=child.first;
-            int wt=child.second;
-            if(level[vertex]+wt<level[v])
-            {
-                level[v]=level[vertex]+wt;
-                if(wt==1)
-                    q.push_back(v);
-                else
-                    q.push_front(v);
+void bfs01(int src, int n) {
+    fill(dist, dist + n + 1, INF);
+    deque<int> dq;
+    dist[src] = 0;
+    dq.push_back(src);
+
+    while (!dq.empty()) {
+        int u = dq.front();
+        dq.pop_front();
+
+        for (auto [v, w] : g[u]) {
+            if (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                if (w == 0) dq.push_front(v);
+                else dq.push_back(v);
             }
         }
     }
-    if(level[n]==INF) return -1;
-    return level[n];
-}
-int main()
-{
-    cin>>n>>m;
-    for(int i=0; i<m; ++i)
-    {
-        int x,y;
-        cin>>x>>y;
-        if(x==y)    
-            continue;
-        g[x].push_back({y,0}); 
-        g[y].push_back({x,1}); 
-    } 
-    cout<<bfs()<<endl;
 }

@@ -1,35 +1,25 @@
-void dfs(int v, int parent)
-{
-    for(int child : g[v])
-    {
-        if(child==parent)
-            continue;
-        depth[child]=depth[v]+1;
-        dfs(child,v);
+const int N = 1e5 + 10;
+vector<int> g[N];
+int max_dist, farthest_node;
+int n;
+
+void dfs_far(int u, int p, int d) {
+    if (d > max_dist) {
+        max_dist = d;
+        farthest_node = u;
+    }
+    for (int v : g[u]) {
+        if (v != p) dfs_far(v, u, d + 1);
     }
 }
-int main()
-{
-    // Take input
-    dfs(1,-1);
-    int mx_depth=-1,mx_depth_node;
-    for(int i=1; i<=n; ++i)
-    {
-        if(mx_depth<depth[i])
-        {
-            mx_depth=depth[i];
-            mx_depth_node=i;
-        }
-        depth[i]=0;
-    }
-    dfs(mx_depth_node,-1);
-    mx_depth=-1;
-    for(int i=1; i<=n; ++i)
-    {
-        if(mx_depth<depth[i])
-        {
-            mx_depth=depth[i];
-        }
-    }
-    cout<<mx_depth<<endl;
+
+int main() {
+    // take input of tree.
+    max_dist = -1;
+    dfs_far(1, 0, 0);
+
+    max_dist = -1;
+    dfs_far(farthest_node, 0, 0);
+
+    int diameter = max_dist;
 }

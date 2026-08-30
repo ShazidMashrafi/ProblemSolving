@@ -1,27 +1,22 @@
-const int N=1e5+10;
-vector<int>g[N];
-int depth[N], height[N];
-void dfs(int vertex, int parent)
-{
-    for(int child : g[vertex])
-    {
-        if(child==parent)  continue;
-        depth[child]=depth[vertex]+1;
-        dfs(child,vertex);
-        height[vertex]=max(height[vertex], height[child]+1);
+const int N = 1e5 + 10;
+vector<int> g[N];
+int depth[N], height[N], sub_size[N];
+int n;
+
+void dfs_tree(int u, int p = 0) {
+    depth[u] = depth[p] + 1;
+    height[u] = 0;
+    sub_size[u] = 1;
+
+    for (int v : g[u]) {
+        if (v == p) continue;
+        dfs_tree(v, u);
+        height[u] = max(height[u], height[v] + 1);
+        sub_size[u] += sub_size[v];
     }
 }
-int main()
-{
-    int n; cin>>n;
-    for(int i=0; i<n-1; ++i)
-    {
-        int x,y;
-        cin>>x>>y;
-        g[x].push_back(y);
-        g[y].push_back(x);
-    }
-    dfs(1,0);
-    for(int i=1; i<=n; ++i)
-        cout<<depth[i]<<" "<<height[i]<<endl;
-} 
+
+int main() {
+    // take input of tree.
+    dfs_tree(1, 0);
+}

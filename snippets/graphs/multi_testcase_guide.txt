@@ -1,0 +1,33 @@
+// ===============================================
+// MULTI-TESTCASE RESET & PASSING (CHEAT SHEET)
+// ===============================================
+
+// 1. NEVER memset(arr, 0, sizeof(arr)) on N=1e5!
+//    O(T * N) causes TLE. ONLY reset up to n:
+for (int i = 1; i <= n; ++i) {
+    g[i].clear();
+    vis[i] = 0;       // or color[i] = -1
+    dist[i] = -1;
+}
+
+// 2. 2D Grid Reset (only up to n x m):
+for (int i = 0; i <= n; ++i)
+    for (int j = 0; j <= m; ++j) dist[i][j] = -1;
+
+// 3. Tarjan SCC / Bridges Reset:
+timer = scc_cnt = 0;
+sccs.clear(); st.clear(); bridges.clear();
+for (int i = 1; i <= n; ++i) {
+    g[i].clear();
+    tin[i] = low[i] = 0;
+    in_stack[i] = is_cut_vertex[i] = false;
+}
+
+// 4. Pass Nested Containers BY REFERENCE (O(1)):
+// ALWAYS use & or const & to avoid O(V+E) copy!
+void f(const vector<vector<pair<int,int>>>& adj);
+void f(const vector<string>& grid);
+void f(const vector<Edge>& edges);
+
+// 5. Prefer Structs for Auto-Reset (DSU, LCA):
+// DSU dsu(n); inside solve() -> zero manual reset!

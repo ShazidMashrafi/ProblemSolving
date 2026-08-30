@@ -1,24 +1,30 @@
-void bellmanFord(vector<vector<int>>& edges, int V, int E, int src) {
-    vector<int> dist(V, INT_MAX);
+const int N = 1005;
+const long long INF = 1e18;
+
+struct Edge {
+    int u, v;
+    long long w;
+};
+
+long long dist[N];
+
+// Returns true if a negative cycle is reachable from src
+bool bellman_ford(int src, int n, const vector<Edge>& edges) {
+    fill(dist, dist + n + 1, INF);
     dist[src] = 0;
-    for (int i = 1; i < V; i++) {
-        for (auto& edge : edges) {
-            int u = edge[0], v = edge[1], w = edge[2];
-            if (dist[u] != INT_MAX && dist[u] + w < dist[v]) {
+
+    for (int i = 1; i <= n - 1; ++i) {
+        for (const auto& [u, v, w] : edges) {
+            if (dist[u] < INF && dist[u] + w < dist[v]) {
                 dist[v] = dist[u] + w;
             }
         }
     }
-    for (auto& edge : edges) {
-        int u = edge[0], v = edge[1], w = edge[2];
-        if (dist[u] != INT_MAX && dist[u] + w < dist[v]) {
-            cout << "Negative cycle exists" << endl;
-            return;
+
+    for (const auto& [u, v, w] : edges) {
+        if (dist[u] < INF && dist[u] + w < dist[v]) {
+            return true;
         }
     }
-    cout << "Vertex\tDistance from source" << endl;
-    for (int i = 0; i < V; i++) {
-        cout << i << "\t" 
-             << (dist[i] == INT_MAX ? "INF" : to_string(dist[i])) << endl;
-    }
+    return false;
 }

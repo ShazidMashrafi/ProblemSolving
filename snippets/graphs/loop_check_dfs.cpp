@@ -1,40 +1,28 @@
-#include<bits/stdc++.h>
-using namespace std;
-#define ll 	long long
-const int N=1e5+10;
-vector<int>g[N];
-bool vis[N];
-bool dfs(int vertex,int parent)
-{
-    vis[vertex]=1;
-    bool loop = false;
-    for(int child : g[vertex])
-    {
-        if(vis[child] && child == parent) continue;
-        if(vis[child])   return true;
-        loop |= dfs(child,vertex);
+const int N = 1e5 + 10;
+vector<int> g[N];
+int vis[N]; // 0: unvisited, 1: in stack, 2: done
+int n, m;
+
+bool dfs(int u, int p = 0) {
+    vis[u] = 1;
+    for (int v : g[u]) {
+        if (v == p) continue; // remove for directed
+        if (vis[v] == 1) return true;
+        if (!vis[v] && dfs(v, u)) return true;
     }
-    return loop;
+    vis[u] = 2;
+    return false;
 }
-int main()
-{
-    int n,e; cin>>n>>e;
-    for(int i=0; i<e; ++i)
-    {
-        int x,y;
-        cin>>x>>y;
-        g[x].push_back(y);
-        g[y].push_back(x);
-    }
+
+int main() {
+    // take input of graph.
+
     bool loop = false;
-    for(int i=1; i<=n; ++i)
-    {
-        if(vis[i])  continue;
-        if(dfs(i,0))
-        {
+    for (int i = 1; i <= n; ++i) {
+        if (!vis[i] && dfs(i, 0)) {
             loop = true;
             break;
         }
     }
-    cout<<loop<<endl;
+    cout << (loop ? "YES" : "NO") << "\n";
 }
