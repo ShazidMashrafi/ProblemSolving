@@ -961,7 +961,7 @@
         "scope": "cpp",
         "description": "[maths] prime_factors",
         "body": [
-            "const int N = 10^7 +10;",
+            "const int N = 1e7 +10;",
             "vector<bool>isPrime(N,1);",
             "vector<int>lp(N,0), hp(N,0);",
             "int main()",
@@ -1157,25 +1157,6 @@
             "        return get(l, r, 0, 0, size);",
             "    }",
             "};"
-        ]
-    },
-    "sieve": {
-        "prefix": "sieve",
-        "scope": "cpp",
-        "description": "[maths] sieve",
-        "body": [
-            "const int N = 10^7 +10;",
-            "vector<bool>isPrime(N,1);",
-            "int main()",
-            "{",
-            "    isPrime[0]=isPrime[1]=0;",
-            "    for(int i=2; i<N; ++i)",
-            "    {",
-            "        if(isPrime[i])",
-            "            for(int j=2*i; j<N; j+=i) ",
-            "                isPrime[j]=0;",
-            "    }",
-            "}"
         ]
     },
     "sparse_table": {

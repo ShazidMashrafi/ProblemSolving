@@ -1,4 +1,4 @@
-const int N = 10^7 +10;
+const int N = 1e7 +10;
 vector<bool>isPrime(N,1);
 vector<int>lp(N,0), hp(N,0);
 int main()
