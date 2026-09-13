@@ -1,7 +1,6 @@
 const int N = 1e5 + 10;
 vector<int> g[N];
 int max_dist, farthest_node;
-int n;
 
 void dfs_far(int u, int p, int d) {
     if (d > max_dist) {
@@ -13,13 +12,10 @@ void dfs_far(int u, int p, int d) {
     }
 }
 
-int main() {
-    // take input of tree.
+int get_diameter(int root = 1) {
     max_dist = -1;
-    dfs_far(1, 0, 0);
-
+    dfs_far(root, 0, 0);
     max_dist = -1;
     dfs_far(farthest_node, 0, 0);
-
-    int diameter = max_dist;
+    return max_dist;
 }

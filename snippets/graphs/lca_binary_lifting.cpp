@@ -2,9 +2,8 @@ const int N = 1e5 + 10;
 const int LOGN = 20;
 vector<int> g[N];
 int up[N][LOGN], depth[N];
-int n;
 
-void dfs_lca(int u, int p = 0, int d = 0) {
+void dfs_lca(int u, int p, int d = 0) {
     depth[u] = d;
     up[u][0] = p;
     for (int j = 1; j < LOGN; ++j) {
@@ -35,9 +34,4 @@ int get_lca(int u, int v) {
 
 int get_dist(int u, int v) {
     return depth[u] + depth[v] - 2 * depth[get_lca(u, v)];
-}
-
-int main() {
-    // take input of tree.
-    dfs_lca(1, 1, 0); // root = 1
 }

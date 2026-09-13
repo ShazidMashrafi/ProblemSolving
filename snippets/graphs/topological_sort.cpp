@@ -1,9 +1,7 @@
 const int N = 1e5 + 10;
 vector<int> g[N];
 int in_degree[N];
-int n, m;
 
-// Returns topological order, or empty vector if cycle exists
 vector<int> kahn_toposort(int n) {
     queue<int> q;
     for (int i = 1; i <= n; ++i) {
@@ -21,11 +19,6 @@ vector<int> kahn_toposort(int n) {
         }
     }
 
-    if ((int)topo.size() < n) return {}; // Cycle detected
+    if ((int)topo.size() < n) return {};
     return topo;
-}
-
-int main() {
-    // take input: g[u].push_back(v); in_degree[v]++;
-    vector<int> order = kahn_toposort(n);
 }

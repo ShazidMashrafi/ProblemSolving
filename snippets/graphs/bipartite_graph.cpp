@@ -1,13 +1,12 @@
 const int N = 1e5 + 10;
 vector<int> g[N];
-int color[N]; // -1: uncolored
-int n, m;
+int color[N]; // -1: unvisited, 0/1: color
 
-bool dfs(int u, int c = 0) {
+bool dfs_bipartite(int u, int c = 0) {
     color[u] = c;
     for (int v : g[u]) {
         if (color[v] == -1) {
-            if (!dfs(v, c ^ 1)) return false;
+            if (!dfs_bipartite(v, c ^ 1)) return false;
         } else if (color[v] == color[u]) {
             return false;
         }
@@ -15,16 +14,10 @@ bool dfs(int u, int c = 0) {
     return true;
 }
 
-int main() {
-    // take input of graph.
-    memset(color, -1, sizeof(color));
-
-    bool ok = true;
+bool is_bipartite(int n) {
+    fill(color, color + n + 1, -1);
     for (int i = 1; i <= n; ++i) {
-        if (color[i] == -1 && !dfs(i, 0)) {
-            ok = false;
-            break;
-        }
+        if (color[i] == -1 && !dfs_bipartite(i, 0)) return false;
     }
-    cout << (ok ? "YES" : "NO") << "\n";
+    return true;
 }

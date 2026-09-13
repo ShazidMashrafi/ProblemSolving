@@ -5,7 +5,6 @@ bool in_stack[N];
 vector<int> st;
 vector<vector<int>> sccs;
 int comp[N], scc_cnt;
-int n, m;
 
 void tarjan_dfs(int u) {
     tin[u] = low[u] = ++timer;
@@ -35,8 +34,13 @@ void tarjan_dfs(int u) {
     }
 }
 
-int main() {
-    // take input of graph.
+void find_sccs(int n) {
+    timer = scc_cnt = 0;
+    sccs.clear();
+    st.clear();
+    fill(tin, tin + n + 1, 0);
+    fill(low, low + n + 1, 0);
+    fill(in_stack, in_stack + n + 1, false);
     for (int i = 1; i <= n; ++i) {
         if (!tin[i]) tarjan_dfs(i);
     }

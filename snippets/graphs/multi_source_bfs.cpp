@@ -10,7 +10,7 @@ bool valid(int x, int y) {
 }
 
 void multi_source_bfs(const vector<pair<int, int>>& sources) {
-    memset(dist, -1, sizeof(dist));
+    for (int i = 0; i < n; ++i) fill(dist[i], dist[i] + m, -1);
     queue<pair<int, int>> q;
 
     for (auto [x, y] : sources) {
