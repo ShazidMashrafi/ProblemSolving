@@ -1,33 +1,27 @@
-// ===============================================
-// MULTI-TESTCASE RESET & PASSING (CHEAT SHEET)
-// ===============================================
+================================================================
+MULTI-TESTCASE GRAPHS GUIDE
+================================================================
 
-// 1. NEVER memset(arr, 0, sizeof(arr)) on N=1e5!
-//    O(T * N) causes TLE. ONLY reset up to n:
-for (int i = 1; i <= n; ++i) {
-    g[i].clear();
-    vis[i] = 0;       // or color[i] = -1
-    dist[i] = -1;
-}
+1. RESET ONLY UP TO N (AVOID O(T * MAXN) TLE)
+   for (int i = 1; i <= n; ++i) {
+       g[i].clear();
+       dist[i] = -1;
+       vis[i] = 0;
+   }
+   // Never: memset(arr, 0, sizeof(arr))
 
-// 2. 2D Grid Reset (only up to n x m):
-for (int i = 0; i <= n; ++i)
-    for (int j = 0; j <= m; ++j) dist[i][j] = -1;
+2. READ ALL INPUT BEFORE EARLY EXIT
+   // BAD:  if (bad) return; // unread input corrupts next test!
+   // GOOD: read all m edges first, then return/print.
+   for (int i = 0; i < m; ++i) cin >> u >> v;
+   if (bad) { cout << -1 << '\n'; return; }
 
-// 3. Tarjan SCC / Bridges Reset:
-timer = scc_cnt = 0;
-sccs.clear(); st.clear(); bridges.clear();
-for (int i = 1; i <= n; ++i) {
-    g[i].clear();
-    tin[i] = low[i] = 0;
-    in_stack[i] = is_cut_vertex[i] = false;
-}
+3. GLOBAL STATIC ARRAYS (FASTER THAN LOCAL VECTORS)
+   // Local vector<int> g[n+1] inside solve() causes heap churn.
+   // Use global vector<int> g[N] and g[i].clear() up to n.
 
-// 4. Pass Nested Containers BY REFERENCE (O(1)):
-// ALWAYS use & or const & to avoid O(V+E) copy!
-void f(const vector<vector<pair<int,int>>>& adj);
-void f(const vector<string>& grid);
-void f(const vector<Edge>& edges);
+4. 2D GRID RESET (O(N * M))
+   for (int i = 0; i < n; ++i) fill(dist[i], dist[i] + m, -1);
 
-// 5. Prefer Structs for Auto-Reset (DSU, LCA):
-// DSU dsu(n); inside solve() -> zero manual reset!
+5. PASS BY REFERENCE (AVOID O(V + E) COPY)
+   void dfs(int u, const vector<vector<int>>& adj);
