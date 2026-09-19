@@ -1,37 +1,41 @@
-class Trie {
-public:
-    vector<array<int, 26>> children;
-    vector<int> endCount;
-    
-    int createNode() {
-        children.pb({});
-        fill(all(children.back()), -1);
-        endCount.pb(0);
-        return sz(children) - 1;
-    }
-    
-    Trie() {
-        createNode();
+struct Trie {
+    struct Node {
+        int next[26] = {};
+        int cnt = 0, end = 0;
+    };
+    vector<Node> t = {Node()};
+
+    void clear() { t.assign(1, Node()); }
+
+    void insert(const string& s) {
+        int u = 0;
+        for (char c : s) {
+            int b = c - 'a';
+            if (!t[u].next[b]) { t.emplace_back(); t[u].next[b] = t.size() - 1; }
+            u = t[u].next[b];
+            t[u].cnt++;
+        }
+        t[u].end++;
     }
 
-    void insert(string &word) {
-        int node = 0;
-        for(char ch : word) {
-            int idx = ch - 'a';
-            if(children[node][idx] == -1)
-                children[node][idx] = createNode();
-            node = children[node][idx];
+    int count(const string& s, bool exact = false) {
+        int u = 0;
+        for (char c : s) {
+            int b = c - 'a';
+            if (!t[u].next[b]) return 0;
+            u = t[u].next[b];
         }
-        endCount[node]++;
+        return exact ? t[u].end : t[u].cnt;
     }
 
-    bool search(string &word) {
-        int node = 0;
-        for(char ch : word) {
-            int idx = ch - 'a';
-            if(children[node][idx] == -1) return false;
-            node = children[node][idx];
+    bool erase(const string& s) {
+        if (!count(s, true)) return false;
+        int u = 0;
+        for (char c : s) {
+            u = t[u].next[c - 'a'];
+            t[u].cnt--;
         }
-        return endCount[node] > 0;
+        t[u].end--;
+        return true;
     }
 };

@@ -1,56 +1,30 @@
-class DSU
-{
-    private:
-    vector<int> par;
-    vector<int> size;
-    public:
-    DSU(int n)
-    {
-        par = vector<int>(n);
+struct DSU {
+    vector<int> par, sz;
+    int comps;
+
+    DSU(int n = 0) : par(n + 1), sz(n + 1, 1), comps(n) {
         iota(par.begin(), par.end(), 0);
-        size = vector<int>(n, 1);
     }
-    int find(int u)
-    {
-        if(par[u] != par[par[u]])
-            par[u] = find(par[par[u]]);        
-        return par[u];
+
+    int find(int u) {
+        return par[u] == u ? u : par[u] = find(par[u]);
     }
-    bool connected(int u, int v)
-    {
-        u = find(u);
-        v = find(v);
-        if(u == v) 
-            return true;
-        return false;
+
+    bool same(int u, int v) {
+        return find(u) == find(v);
     }
-    bool join(int u, int v)
-    {
-        u = find(u);
-        v = find(v);
-        if(u == v) 
-            return false;
-        if(size[u] <= size[v])
-        {
-            size[v] += size[u];
-            par[u] = v;
-        }
-        else
-        {
-            size[u] += size[v];
-            par[v] = u;
-        }
+
+    bool unite(int u, int v) {
+        u = find(u); v = find(v);
+        if (u == v) return false;
+        if (sz[u] < sz[v]) swap(u, v);
+        par[v] = u;
+        sz[u] += sz[v];
+        comps--;
         return true;
     }
-};
-void solve()
-{
-    int n, m;
-    cin >> n >> m;
-    DSU dsu(n);
-    for(int i = 0; i < n; ++i)
-    {
-        int v, u; cin >> v >> u;
-        dsu.join(v, u);
+
+    int size(int u) {
+        return sz[find(u)];
     }
-}
+};

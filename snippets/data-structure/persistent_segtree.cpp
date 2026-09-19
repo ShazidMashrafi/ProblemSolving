@@ -1,66 +1,53 @@
-struct Node { // segment tree with pointers
-    int sum;
-    Node *l, *r;
-    Node (int _sum, Node *_l, Node *_r) {
-        sum = _sum;
-        l = _l;
-        r = _r;
-    }
-};
+struct PersistentSegTree {
+    struct Node {
+        int l = 0, r = 0;
+        int count = 0;
+    };
+    int n;
+    vector<Node> tree;
+    vector<int> roots;
 
-struct segTree { //persistent segment tree
-    int size = 1;
-    vector<Node*> roots;
-    segTree(int n) {
-        while (size < n) size <<= 1;
-        Node *root = new Node(0, nullptr, nullptr);
-        roots.pb(root);
+    PersistentSegTree(int n = 0) : n(n) {
+        tree.emplace_back();
+        roots.push_back(0);
     }
-    void build(vector<int> &v, Node *curr, int lx, int rx) {
-        if (rx - lx == 1) { // 0 - 1, 1 - 2, 2 - 3 ...
-            if (lx < size(v)) {
-                curr->sum = v[lx];
-            }
-            curr->l = nullptr;
-            curr->r = nullptr;
-            return;
-        }
-        curr->l = new Node(0, nullptr, nullptr);
-        curr->r = new Node(0, nullptr, nullptr);
-        int mid = (lx + rx) / 2;
-        build(v, curr->l, lx, mid);
-        build(v, curr->r, mid, rx);
-        curr->sum = curr->l->sum + curr->r->sum;
-        debug(curr->sum)
+
+    int update(int prev_root, int l, int r, int pos, int val) {
+        int cur = tree.size();
+        tree.push_back(tree[prev_root]);
+        tree[cur].count += val;
+        if (l == r) return cur;
+        int mid = (l + r) / 2;
+        if (pos <= mid)
+            tree[cur].l = update(tree[prev_root].l, l, mid, pos, val);
+        else
+            tree[cur].r = update(tree[prev_root].r, mid + 1, r, pos, val);
+        return cur;
     }
-    void build(vector<int> &v, int root) { build(v, roots[root], 0, size); }
-    void build(int root) { 
-        roots.pb(new Node(roots[root]->sum, roots[root]->l, roots[root]->r));
+    void update(int pos, int val) {
+        roots.push_back(update(roots.back(), 0, n - 1, pos, val));
     }
-    void set(int indx, int val, Node *curr, int lx, int rx) { // O(logn)
-        if (rx - lx == 1) { // range is l ... (r - 1)
-            curr->sum = val;
-            return;
-        }
-        int mid = (lx + rx) / 2;
-        if (indx < mid) {
-            curr->l = new Node(curr->l->sum, curr->l->l, curr->l->r);
-            set(indx, val, curr->l, lx, mid);
-        } else {
-            curr->r = new Node(curr->r->sum, curr->r->l, curr->r->r);
-            set(indx, val, curr->r, mid, rx);
-        }
-        curr->sum = curr->l->sum + curr->r->sum;
-        debug(curr->sum)
+
+    int query(int node, int l, int r, int ql, int qr) {
+        if (!node || ql > r || qr < l) return 0;
+        if (ql <= l && r <= qr) return tree[node].count;
+        int mid = (l + r) / 2;
+        return query(tree[node].l, l, mid, ql, qr) + query(tree[node].r, mid + 1, r, ql, qr);
     }
-    void set(int indx, int val, int root) { set(indx, val, roots[root], 0, size); }
-    int sum(int l, int r, Node *curr, int lx, int rx) { // O(logn)
-        if (rx <= l || lx >= r) return 0;
-        if (lx >= l && rx <= r) return curr->sum;
-        int mid = (lx + rx) / 2;
-        int left = sum(l, r, curr->l, lx, mid);
-        int right = sum(l, r, curr->r, mid, rx);
-        return left + right;
+    int query(int version, int ql, int qr) {
+        return query(roots[version], 0, n - 1, ql, qr);
     }
-    int sum(int l, int r, int root) { return sum(l, r, roots[root], 0, size); }
+
+    int kth(int node_l, int node_r, int l, int r, int k) {
+        if (l == r) return l;
+        int mid = (l + r) / 2;
+        int left_count = tree[tree[node_r].l].count - tree[tree[node_l].l].count;
+        if (k <= left_count)
+            return kth(tree[node_l].l, tree[node_r].l, l, mid, k);
+        else
+            return kth(tree[node_l].r, tree[node_r].r, mid + 1, r, k - left_count);
+    }
+    int kth(int version_l, int version_r, int k) {
+        return kth(roots[version_l], roots[version_r], 0, n - 1, k);
+    }
 };

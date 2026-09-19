@@ -1,66 +1,32 @@
-struct Nodem
-{
-    vector<pair<int, int>> pref;
-};
+struct MergeSortTree {
+    int n;
+    vector<vector<int>> tree;
 
-struct segTree {    
-    int size = 1;
-    vector<Nodem> tree;
-    segTree(int n) {
-        while (size < n) size <<= 1;
-        // tree.assign(2 * size, 0LL);
-        tree.resize(2 * size);
+    MergeSortTree(const vector<int>& arr) {
+        n = arr.size();
+        tree.resize(4 * n);
+        build(arr, 1, 0, n - 1);
     }
-    Nodem neutral;
-    void merge(Nodem &curr, Nodem &left, Nodem &right) { // merge sort tree;
-        int l = 0, r = 0, i = 0;
-        while(l < size(left.pref) && r < size(right.pref)) {
-            if (left.pref[l].first <= right.pref[r].first) {
-                int prefed = (curr.pref.empty() ? left.pref[l].first : (curr.pref.back().second + left.pref[l].first));
-                curr.pref.pb({left.pref[l].first, prefed});
-                l++;
-            } else {
-                int prefed = (curr.pref.empty() ? right.pref[r].first : (curr.pref.back().second + right.pref[r].first));
-                curr.pref.pb({right.pref[r].first, prefed});
-                r++;
-            }
-            i++;
-        }
-        while(l < size(left.pref)) {
-            int prefed = (curr.pref.empty() ? left.pref[l].first : (curr.pref.back().second + left.pref[l].first));
-            curr.pref.pb({left.pref[l].first, prefed});
-            l++;
-        }
-        while(r < size(right.pref)) {
-            int prefed = (curr.pref.empty() ? right.pref[r].first : (curr.pref.back().second + right.pref[r].first));
-            curr.pref.pb({right.pref[r].first, prefed});
-            r++;
-        }
+
+    void build(const vector<int>& arr, int p, int l, int r) {
+        if (l == r) { tree[p] = {arr[l]}; return; }
+        int mid = (l + r) / 2;
+        build(arr, 2 * p, l, mid);
+        build(arr, 2 * p + 1, mid + 1, r);
+        merge(tree[2 * p].begin(), tree[2 * p].end(),
+              tree[2 * p + 1].begin(), tree[2 * p + 1].end(),
+              back_inserter(tree[p]));
     }
-    void build(vector<int> &v, int curr, int lx, int rx) {
-        if (rx - lx == 1) { // 0 - 1, 1 - 2, 2 - 3 ...
-            if (lx < size(v)) {
-                tree[curr].pref.pb({v[lx], v[lx]});
-            }
-            return;
+
+    // Count elements <= x in range [ql, qr]
+    int count_le(int ql, int qr, int x, int p, int l, int r) {
+        if (ql <= l && r <= qr) {
+            return upper_bound(tree[p].begin(), tree[p].end(), x) - tree[p].begin();
         }
-        int mid = (lx + rx) / 2;
-        build(v, 2 * curr + 1, lx, mid);
-        build(v, 2 * curr + 2, mid, rx);
-        merge(tree[curr], tree[2 * curr + 1], tree[2 * curr + 2]);
+        int mid = (l + r) / 2, res = 0;
+        if (ql <= mid) res += count_le(ql, qr, x, 2 * p, l, mid);
+        if (qr > mid)  res += count_le(ql, qr, x, 2 * p + 1, mid + 1, r);
+        return res;
     }
-    void build(vector<int> &v) { build(v, 0, 0, size); }
-    int get(int x, int l, int r, int curr, int lx, int rx) { // O(logn)
-        if (rx <= l || lx >= r) return 0;
-        if (lx >= l && rx <= r) {
-            auto it = upper_bound(all(tree[curr].pref), make_pair(x, LLONG_MAX));
-            if (it == tree[curr].pref.begin()) return 0;
-            return prev(it)->second;
-        };
-        int mid = (lx + rx) / 2;
-        int left = get(x, l, r, 2 * curr + 1, lx, mid);
-        int right = get(x, l, r, 2 * curr + 2, mid, rx);
-        return left + right;
-    }
-    int get(int x, int l, int r) { return get(x, l, r, 0, 0, size); }
+    int count_le(int ql, int qr, int x) { return count_le(ql, qr, x, 1, 0, n - 1); }
 };

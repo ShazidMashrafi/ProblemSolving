@@ -1,52 +1,54 @@
-struct Node {
-    int sum, inc;
-};
-struct segTree {
-    int size = 1;
-    vector<Node> tree;
-    Node neutral = {0, 0};
-    segTree(int n) {
-        while (size < n) size <<= 1;
-        tree.assign(2 * size, neutral);
+struct LazySegTree {
+    int n;
+    vector<long long> tree, lazy;
+
+    LazySegTree(int n = 0) : n(n), tree(4 * n, 0), lazy(4 * n, 0) {}
+
+    void build(const vector<long long>& arr, int p, int l, int r) {
+        if (l == r) { tree[p] = arr[l]; return; }
+        int mid = (l + r) / 2;
+        build(arr, 2 * p, l, mid);
+        build(arr, 2 * p + 1, mid + 1, r);
+        tree[p] = tree[2 * p] + tree[2 * p + 1];
     }
-    void push(int curr, int lx, int rx) {
-        if (tree[curr].inc == 0) return;
-        int mid = (lx + rx) / 2;
-        tree[2 * curr + 1].inc += tree[curr].inc;
-        tree[2 * curr + 1].sum += tree[curr].inc * (mid - lx);
-        tree[2 * curr + 2].inc += tree[curr].inc;
-        tree[2 * curr + 2].sum += tree[curr].inc * (rx - mid);
-        tree[curr].inc = 0;
+    void build(const vector<long long>& arr) {
+        n = arr.size();
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+        build(arr, 1, 0, n - 1);
     }
-    void set(int inc, int l, int r, int curr, int lx, int rx) { // O(logn)
-        if (rx <= l || lx >= r) return;
-        if (lx >= l && rx <= r) {
-            tree[curr].inc += inc;
-            tree[curr].sum += inc * (rx - lx);
-            return;
-        }
-        push(curr, lx, rx);
-        int mid = (lx + rx) / 2;
-        set(inc, l, r, 2 * curr + 1, lx, mid);
-        set(inc, l, r, 2 * curr + 2, mid, rx);
-        tree[curr].sum = tree[2 * curr + 1].sum + tree[2 * curr + 2].sum;
+
+    void apply(int p, int l, int r, long long val) {
+        tree[p] += val * (r - l + 1);
+        lazy[p] += val;
     }
-    void set(int inc, int l, int r) {
-        set(inc, l, r, 0, 0, size);
+
+    void push(int p, int l, int r) {
+        if (!lazy[p]) return;
+        int mid = (l + r) / 2;
+        apply(2 * p, l, mid, lazy[p]);
+        apply(2 * p + 1, mid + 1, r, lazy[p]);
+        lazy[p] = 0;
     }
-    int get(int l, int r, int curr, int lx, int rx) { // O(logn)
-        if (rx <= l || lx >= r) return 0; // neutral???
-        if (lx >= l && rx <= r) {
-            return tree[curr].sum;
-        }
-        push(curr, lx, rx);
-        int mid = (lx + rx) / 2;
-        int s1 = get(l, r, 2 * curr + 1, lx, mid);
-        int s2 = get(l, r, 2 * curr + 2, mid, rx);
-        // do we merge?
-        return s1 + s2;
-    }   
-    int get(int l, int r) {
-        return get(l, r, 0, 0, size);
+
+    void update(int ql, int qr, long long val, int p, int l, int r) {
+        if (ql <= l && r <= qr) { apply(p, l, r, val); return; }
+        push(p, l, r);
+        int mid = (l + r) / 2;
+        if (ql <= mid) update(ql, qr, val, 2 * p, l, mid);
+        if (qr > mid)  update(ql, qr, val, 2 * p + 1, mid + 1, r);
+        tree[p] = tree[2 * p] + tree[2 * p + 1];
     }
+    void update(int ql, int qr, long long val) { update(ql, qr, val, 1, 0, n - 1); }
+
+    long long query(int ql, int qr, int p, int l, int r) {
+        if (ql <= l && r <= qr) return tree[p];
+        push(p, l, r);
+        int mid = (l + r) / 2;
+        long long res = 0;
+        if (ql <= mid) res += query(ql, qr, 2 * p, l, mid);
+        if (qr > mid)  res += query(ql, qr, 2 * p + 1, mid + 1, r);
+        return res;
+    }
+    long long query(int ql, int qr) { return query(ql, qr, 1, 0, n - 1); }
 };
