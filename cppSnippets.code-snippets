@@ -376,6 +376,51 @@
             "}"
         ]
     },
+    "cpt": {
+        "prefix": "cpt",
+        "scope": "cpp",
+        "description": "[templates] cpt",
+        "body": [
+            "#include <bits/stdc++.h>",
+            "using namespace std;",
+            "#if defined(LOCAL) && !defined(ONLINE_JUDGE)",
+            "#include \"debug.h\"",
+            "#else",
+            "#define dbg(...)",
+            "#endif",
+            "#define  ll  long long",
+            "#define  endl  '\\n'",
+            "#define  ff  first",
+            "#define  ss  second",
+            "#define  pb  push_back",
+            "#define  sz(x)  (int)(x).size()",
+            "#define  all(x)  x.begin(), x.end()",
+            "#define  Dpos(n) fixed << setprecision(n)",
+            "#define  yn(f)  f? cout<<\"YES\\n\":cout<<\"NO\\n\"",
+            "#define  FAST  (ios_base::sync_with_stdio(false), cin.tie(nullptr));",
+            "ll binpow(ll x,ll y,ll m=LLONG_MAX) {ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;x=(x*x)%m;y>>=1;}return ans;}",
+            "",
+            "void solve()",
+            "{",
+            "    ",
+            "}",
+            "",
+            "signed main()",
+            "{",
+            "    FAST;",
+            "    // freopen(\"input.txt\", \"r\", stdin);",
+            "    // freopen(\"output.txt\", \"w\", stdout);",
+            "",
+            "    int TCS = 1;",
+            "    // cin >> TCS;",
+            "    for (int TC = 1; TC <= TCS; ++TC)",
+            "    {",
+            "        // cout<<\"Case \"<<TC<<\": \";",
+            "        solve();",
+            "    }",
+            "}"
+        ]
+    },
     "cycle_detect_dfs": {
         "prefix": "cycle_detect_dfs",
         "scope": "cpp",
@@ -604,6 +649,37 @@
             "}"
         ]
     },
+    "lcs": {
+        "prefix": "lcs",
+        "scope": "cpp",
+        "description": "[dp] lcs",
+        "body": [
+            "string lcs(const string &s, const string &t) {",
+            "    int n = s.size(), m = t.size();",
+            "    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));",
+            "    for (int i = 0; i < n; i++) {",
+            "        for (int j = 0; j < m; j++) {",
+            "            if (s[i] == t[j]) dp[i + 1][j + 1] = dp[i][j] + 1;",
+            "            else dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);",
+            "        }",
+            "    }",
+            "    string res;",
+            "    int i = n, j = m;",
+            "    while (i > 0 && j > 0) {",
+            "        if (s[i - 1] == t[j - 1]) {",
+            "            res += s[i - 1];",
+            "            i--; j--;",
+            "        } else if (dp[i - 1][j] > dp[i][j - 1]) {",
+            "            i--;",
+            "        } else {",
+            "            j--;",
+            "        }",
+            "    }",
+            "    reverse(res.begin(), res.end());",
+            "    return res; // res.size() is LCS length",
+            "}"
+        ]
+    },
     "lis": {
         "prefix": "lis",
         "scope": "cpp",
@@ -670,6 +746,42 @@
             "        return {(center - len) / 2, len};",
             "    }",
             "};"
+        ]
+    },
+    "matrix_exponentiation": {
+        "prefix": "matrix_exponentiation",
+        "scope": "cpp",
+        "description": "[maths] matrix_exponentiation",
+        "body": [
+            "const long long MOD = 1e9 + 7;",
+            "using Matrix = vector<vector<long long>>;",
+            "",
+            "Matrix multiply(const Matrix &A, const Matrix &B, long long m = MOD) {",
+            "    int n = A.size();",
+            "    Matrix result(n, vector<long long>(n, 0));",
+            "    for (int i = 0; i < n; ++i) {",
+            "        for (int j = 0; j < n; ++j) {",
+            "            for (int k = 0; k < n; ++k) {",
+            "                result[i][j] = (result[i][j] + A[i][k] * B[k][j]) % m;",
+            "            }",
+            "        }",
+            "    }",
+            "    return result;",
+            "}",
+            "",
+            "Matrix matrixExpo(Matrix A, long long power, long long m = MOD) {",
+            "    int n = A.size();",
+            "    Matrix result(n, vector<long long>(n, 0));",
+            "    for (int i = 0; i < n; ++i) result[i][i] = 1;",
+            "    while (power > 0) {",
+            "        if (power & 1) {",
+            "            result = multiply(result, A, m);",
+            "        }",
+            "        A = multiply(A, A, m);",
+            "        power >>= 1;",
+            "    }",
+            "    return result;",
+            "}"
         ]
     },
     "merge_sort_tree": {
@@ -790,6 +902,20 @@
             "        }",
             "    }",
             "}"
+        ]
+    },
+    "ordered_set": {
+        "prefix": "ordered_set",
+        "scope": "cpp",
+        "description": "[data-structures] ordered_set",
+        "body": [
+            "#include <ext/pb_ds/assoc_container.hpp>",
+            "#include <ext/pb_ds/tree_policy.hpp>",
+            "using namespace __gnu_pbds;",
+            "",
+            "typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;",
+            "// find_by_order(k) : returns iterator to kth smallest element (0-indexed)",
+            "// order_of_key(v)  : returns number of elements strictly smaller than v"
         ]
     },
     "persistent_segtree": {

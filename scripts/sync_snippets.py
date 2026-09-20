@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-sync_snippets.py - Compiles snippets/*.cpp into cppSnippets.code-snippets
+sync_snippets.py - Compiles snippets/*.cpp and templates/cpt.cpp into cppSnippets.code-snippets
 and sets up symlinks for VS Code and Antigravity IDE.
 """
 
@@ -16,6 +16,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SNIPPETS_DIR = REPO_ROOT / "snippets"
 OUTPUT_FILE = REPO_ROOT / "cppSnippets.code-snippets"
+EXTRA_SNIPPET_FILES = [REPO_ROOT / "templates" / "cpt.cpp"]
 
 EDITOR_SNIPPET_DIRS = [
     Path.home() / ".config" / "Code" / "User" / "snippets",
@@ -26,8 +27,11 @@ EDITOR_SNIPPET_DIRS = [
 
 def snippet_from_file(file_path: Path):
     """Builds snippet entry dict from a .cpp file."""
-    rel_path = file_path.relative_to(SNIPPETS_DIR)
-    category = rel_path.parts[0] if len(rel_path.parts) > 1 else "general"
+    try:
+        rel_path = file_path.relative_to(SNIPPETS_DIR)
+        category = rel_path.parts[0] if len(rel_path.parts) > 1 else "general"
+    except ValueError:
+        category = file_path.parent.name
     prefix = file_path.stem
 
     with open(file_path, "r", encoding="utf-8", errors="replace") as f:
@@ -42,7 +46,7 @@ def snippet_from_file(file_path: Path):
 
 
 def full_build():
-    """Scans all .cpp files in snippets/ and builds cppSnippets.code-snippets."""
+    """Scans all .cpp files in snippets/ and extra template files and builds cppSnippets.code-snippets."""
     snippets = {}
     if not SNIPPETS_DIR.exists():
         print(f"Error: {SNIPPETS_DIR} does not exist.")
@@ -55,6 +59,11 @@ def full_build():
                 key = fpath.stem
                 snippets[key] = snippet_from_file(fpath)
 
+    # Include extra snippet files (e.g. templates/cpt.cpp)
+    for extra_file in EXTRA_SNIPPET_FILES:
+        if extra_file.exists():
+            snippets[extra_file.stem] = snippet_from_file(extra_file)
+
     save_snippets(snippets)
     print(f"Successfully compiled {len(snippets)} snippets to {OUTPUT_FILE.relative_to(REPO_ROOT)}")
     return snippets
@@ -65,9 +74,12 @@ def incremental_update():
     if not OUTPUT_FILE.exists():
         return full_build()
 
+    extra_rel_paths = [str(p.relative_to(REPO_ROOT)) for p in EXTRA_SNIPPET_FILES]
+    diff_targets = ["snippets/"] + extra_rel_paths
+
     # Get git diff --cached (staged) files, or fall back to unstaged if empty
     res = subprocess.run(
-        ["git", "diff", "--cached", "--name-status", "snippets/"],
+        ["git", "diff", "--cached", "--name-status"] + diff_targets,
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -77,7 +89,7 @@ def incremental_update():
     if not diff_output:
         # Check unstaged status
         res = subprocess.run(
-            ["git", "status", "--porcelain", "snippets/"],
+            ["git", "status", "--porcelain"] + diff_targets,
             cwd=REPO_ROOT,
             capture_output=True,
             text=True,
