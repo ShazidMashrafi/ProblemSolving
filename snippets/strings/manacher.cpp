@@ -1,33 +1,31 @@
-/* notes: 
-1. modifies string by adding '#' bef&after every char;
-2. p[i] = size of palindrome that exist in original string; here i is the center of that palindrome of modified string;
-3. palindrome at ith(modified string's) position is: s.substr((index/2) - (pal_size/2), pal_size);
-*/
-struct Manachers { // O(n)
+struct Manacher {
+    int n;
+    string ms;
     vector<int> p;
-    string s;
-    Manachers(string &_s) {
-        s = "#";  // build new string
-        for(int i = 0; i < size(_s); i++) {
-            s.push_back(_s[i]);  s.push_back('#');
-        }
-        int n = size(s);
+    Manacher(const string &s) {
+        ms = "^#";
+        for (char c : s) { ms += c; ms += '#'; }
+        ms += '$';
+        n = ms.size();
         p.assign(n, 0);
-        int l = 0, r = 0; //curr largest pal range
-        for(int i = 0; i < n; i++) {
-            int mirror = l + (r - i);
-            if (i < r)  p[i] = min(r - i, p[mirror]);
-            while(i + p[i] + 1 < n && i - p[i] - 1 >= 0 && s[i + p[i] + 1] == s[i - p[i] - 1]) {
-                p[i]++;
-            }
-            if(i + p[i] > r) {  // if new largest pal found
-                l = i - p[i]; r = i + p[i];
-            }
+        int l = 1, r = 1;
+        for (int i = 1; i < n - 1; i++) {
+            p[i] = max(0, min(r - i, p[l + (r - i)]));
+            while (ms[i - p[i]] == ms[i + p[i]]) p[i]++;
+            if (i + p[i] > r) { l = i - p[i]; r = i + p[i]; }
         }
     }
-    bool is_palindrome(int l, int r) { // O(1)
-        l = 2 * l + 1; r = 2 * r + 1;
-        int center = (l + r) / 2; // of modified string
-        return p[center] >= (r - l + 1) / 2;
+    // 0-indexed [l, r] in original string
+    bool is_palindrome(int l, int r) {
+        return p[l + r + 2] - 1 >= r - l + 1;
+    }
+    // returns {start_idx, max_len} in original string
+    pair<int, int> longest_palindrome() {
+        int mx = 0, center = 0;
+        for (int i = 1; i < n - 1; i++) {
+            if (p[i] > mx) { mx = p[i]; center = i; }
+        }
+        int len = mx - 1;
+        return {(center - len) / 2, len};
     }
 };

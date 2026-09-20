@@ -15,7 +15,7 @@ using namespace std;
 #define  Dpos(n) fixed << setprecision(n)
 #define  yn(f)  f? cout<<"YES\n":cout<<"NO\n"
 #define  FAST  (ios_base::sync_with_stdio(false), cin.tie(nullptr));
-ll power(ll x,ll y,ll m=LLONG_MAX) {ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;x=(x*x)%m;y>>=1;}return ans;}
+ll binpow(ll x,ll y,ll m=LLONG_MAX) {ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;x=(x*x)%m;y>>=1;}return ans;}
 
 void solve()
 {

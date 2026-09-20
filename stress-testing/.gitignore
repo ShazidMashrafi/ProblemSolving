@@ -1,5 +1,10 @@
+# Ignore everything by default (binaries, test inputs, outputs)
 *
+
+# Whitelist configuration and source files
 !.gitignore
 !test.sh
 !test.py
 !test.bat
+!*.cpp
+!*.h
