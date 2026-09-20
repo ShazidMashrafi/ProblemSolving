@@ -1,0 +1,39 @@
+// ================================================================
+// BITS & BITSET CHEATSHEET
+// Always use 1LL when bit-shifting 64-bit integers: (1LL << i)
+// ================================================================
+
+// --- GCC 64-bit Built-ins ---
+__builtin_popcountll(n); // Number of set bits
+__builtin_clzll(n);      // Leading zeros (63 - clzll(n) = highest set bit, 0-indexed)
+__builtin_ctzll(n);      // Trailing zeros (index of lowest set bit, 0-indexed)
+
+// --- Bit Operations (64-bit safe) ---
+check_bit(n, i)     : (n & (1LL << i)) != 0
+set_bit(n, i)       : n | (1LL << i)
+clear_bit(n, i)     : n & ~(1LL << i)
+toggle_bit(n, i)    : n ^ (1LL << i)
+lowest_set_bit(n)   : n & (-n)
+clear_lowest_bit(n) : n & (n - 1)
+n_set_bits(n)       : (1LL << n) - 1            // e.g. 3 -> 0b111 (7)
+is_power_of_two(n)  : n > 0 && !(n & (n - 1))
+
+// --- Submask Enumeration (Iterates all submasks of mask in O(3^n) total) ---
+for (int sub = mask; sub > 0; sub = (sub - 1) & mask) { /* process sub */ }
+
+// --- Bit Math Identities ---
+// a + b = (a ^ b) + 2 * (a & b)
+// a + b = (a | b) + (a & b)
+// a ^ b = (a | b) - (a & b)
+
+// --- std::bitset<SIZE> ---
+// Size must be compile-time constant. Operations are ~64x faster than bool array.
+bitset<SIZE> b;              // All 0s
+bitset<SIZE> b(val);         // From integer val (or bitset<SIZE> b("1010"))
+b.set(pos), b.reset(pos)     // Set to 1, reset to 0
+b.flip(pos), b.flip()        // Toggle bit at pos, invert all bits
+b.count()                    // Number of set bits (popcount)
+b.any(), b.none(), b.all()   // True if any / none / all bits are set
+b.to_ullong()                // Convert to unsigned long long (<= 64 bits)
+b.to_string()                // Convert to "0101..." string
+// Bitwise operators between same-size bitsets: &, |, ^, ~, <<, >>

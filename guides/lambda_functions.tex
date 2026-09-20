@@ -1,0 +1,16 @@
+\noindent
+\textbf{Syntax:} \texttt{[capture](parameters) -> return\_type \{ body \};}
+
+\begin{enumerate}
+    \item \textbf{\texttt{[\&]} --- Capture ALL outer variables by reference} (use inside \texttt{solve()}):\\
+    \texttt{auto check = [\&](ll mid) \{ return count >= k; \};}
+
+    \item \textbf{\texttt{[]} --- Capture NOTHING} (for standalone comparators):\\
+    \texttt{sort(a.begin(), a.end(), [](auto\& a, auto\& b) \{ ... \});}
+
+    \item \textbf{\texttt{(auto\& a)} --- Parameter by reference} (zero-copy for pair/struct/string):\\
+    \texttt{[](const auto\& a, const auto\& b) \{ return a.first < b.first; \}}
+
+    \item \textbf{\texttt{(auto\& self)} --- Recursive lambda self-reference}:\\
+    \texttt{auto dfs = [\&](auto\& self, int u) -> void \{ self(self, v); \};}
+\end{enumerate}

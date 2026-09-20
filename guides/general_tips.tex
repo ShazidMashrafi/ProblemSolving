@@ -8,7 +8,8 @@
     \item \textbf{Loop Variables}: Never shadow outer loop variables in inner loops (\texttt{i}, \texttt{j}).
     \item \textbf{Randomization Trick}: To bypass anti-hash/anti-quicksort test cases, shuffle with high-precision clock:
     \begin{itemize}
-        \item \texttt{mt19937\_64 rng(chrono::steady\_clock::now().time\_since\_epoch().count());}
+        \item \texttt{auto s = chrono::steady\_clock::now();}
+        \item \texttt{mt19937\_64 rng(s.time\_since\_epoch().count());}
         \item \texttt{shuffle(a.begin(), a.end(), rng);}
     \end{itemize}
     \item \textbf{Trigonometry}: \texttt{sin}, \texttt{cos}, \texttt{atan2} work with radians. To convert: $\text{deg} = \text{rad} \cdot \frac{180}{\pi}$, $\text{rad} = \text{deg} \cdot \frac{\pi}{180}$.
@@ -22,12 +23,3 @@
     \end{itemize}
     \item \textbf{Heavy-Light String Trick}: If string length $> \sqrt{\text{max\_length}}$, use polynomial hashing; else use Trie.
 \end{itemize}
-
-\subsection*{Sorting Pairs with Custom Comparator}
-\begin{lstlisting}[language=C++]
-// Sort by first ascending; if tie, by second descending:
-bool cmp(const pair<int, int>& a, const pair<int, int>& b) {
-    if (a.first != b.first) return a.first < b.first;
-    return a.second > b.second;
-}
-\end{lstlisting}
