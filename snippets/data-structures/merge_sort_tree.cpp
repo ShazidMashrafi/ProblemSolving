@@ -1,14 +1,14 @@
-struct MergeSortTree {
+struct MSTree {
     int n;
     vector<vector<int>> tree;
 
-    MergeSortTree(const vector<int>& arr) {
+    MSTree(auto& arr) {
         n = arr.size();
         tree.resize(4 * n);
         build(arr, 1, 0, n - 1);
     }
 
-    void build(const vector<int>& arr, int p, int l, int r) {
+    void build(auto& arr, int p, int l, int r) {
         if (l == r) { tree[p] = {arr[l]}; return; }
         int mid = (l + r) / 2;
         build(arr, 2 * p, l, mid);

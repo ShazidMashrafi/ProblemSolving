@@ -1,4 +1,4 @@
-struct PersistentSegTree {
+struct PST {
     struct Node {
         int l = 0, r = 0;
         int count = 0;
@@ -7,7 +7,7 @@ struct PersistentSegTree {
     vector<Node> tree;
     vector<int> roots;
 
-    PersistentSegTree(int n = 0) : n(n) {
+    PST(int n = 0) : n(n) {
         tree.emplace_back();
         roots.push_back(0);
     }

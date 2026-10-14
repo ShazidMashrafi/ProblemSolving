@@ -1,10 +1,8 @@
-const int N = 1e5 + 10;
-vector<int> g[N];
-bool vis[N];
-
-void dfs(int u) {
-    vis[u] = true;
+// lambda DFS
+auto dfs = [&](auto& self, int u, int p) -> void {
     for (int v : g[u]) {
-        if (!vis[v]) dfs(v);
+        if (v == p) continue;
+        self(self, v, u);
     }
-}
+};
+dfs(dfs, 1, 0);

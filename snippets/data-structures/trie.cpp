@@ -7,7 +7,7 @@ struct Trie {
 
     void clear() { t.assign(1, Node()); }
 
-    void insert(const string& s) {
+    void insert(auto& s) {
         int u = 0;
         for (char c : s) {
             int b = c - 'a';
@@ -18,7 +18,7 @@ struct Trie {
         t[u].end++;
     }
 
-    int count(const string& s, bool exact = false) {
+    int count(auto& s, bool exact = false) {
         int u = 0;
         for (char c : s) {
             int b = c - 'a';
@@ -28,7 +28,7 @@ struct Trie {
         return exact ? t[u].end : t[u].cnt;
     }
 
-    bool erase(const string& s) {
+    bool erase(auto& s) {
         if (!count(s, true)) return false;
         int u = 0;
         for (char c : s) {

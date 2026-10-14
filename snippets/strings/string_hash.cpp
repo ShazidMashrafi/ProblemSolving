@@ -21,8 +21,8 @@ struct Hashing {
     int n;
     string s;
     vector<pair<int, int>> hs, rhs;
-    Hashing() {}
-    Hashing(const string &_s) {
+
+    Hashing(auto& _s) {
         precal_pow();
         s = _s;
         n = s.size();
@@ -35,19 +35,22 @@ struct Hashing {
             rhs[i + 1].second = (rhs[i].second + 1LL * pw[i].second * s[n - 1 - i]) % MOD2;
         }
     }
-    pair<int, int> get_hash(int l, int r) { // 1-indexed [l, r]
+
+    pair<int, int> get(int l, int r) { // 1-indexed [l, r]
         pair<int, int> ans;
         ans.first = (1LL * (hs[r].first - hs[l - 1].first + MOD1) * inv_pw[l - 1].first) % MOD1;
         ans.second = (1LL * (hs[r].second - hs[l - 1].second + MOD2) * inv_pw[l - 1].second) % MOD2;
         return ans;
     }
-    pair<int, int> get_rev_hash(int l, int r) { // 1-indexed [l, r]
+
+    pair<int, int> get_rev(int l, int r) { // 1-indexed [l, r]
         int rev_l = n - r + 1, rev_r = n - l + 1;
         pair<int, int> ans;
         ans.first = (1LL * (rhs[rev_r].first - rhs[rev_l - 1].first + MOD1) * inv_pw[rev_l - 1].first) % MOD1;
         ans.second = (1LL * (rhs[rev_r].second - rhs[rev_l - 1].second + MOD2) * inv_pw[rev_l - 1].second) % MOD2;
         return ans;
     }
-    pair<int, int> get_hash() { return get_hash(1, n); }
-    bool is_palindrome(int l, int r) { return get_hash(l, r) == get_rev_hash(l, r); }
+
+    pair<int, int> get() { return get(1, n); }
+    bool is_pal(int l, int r) { return get(l, r) == get_rev(l, r); }
 };

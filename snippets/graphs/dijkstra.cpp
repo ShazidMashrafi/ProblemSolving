@@ -1,29 +1,33 @@
-const int N = 1e5 + 10;
-const long long INF = 1e18;
-vector<pair<int, int>> g[N]; // {neighbor, weight}
-long long dist[N];
-int parent[N];
+struct Dijkstra {
+    ll INF = 1e18;
+    vector<ll> dist;
+    vector<int> par;
 
-void dijkstra(int src, int n) {
-    fill(dist, dist + n + 1, INF);
-    priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<>> pq;
+    Dijkstra(int n, int src, auto& g) : dist(n + 1, INF), par(n + 1, -1) {
+        priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<>> pq;
+        dist[src] = 0;
+        pq.push({0, src});
 
-    dist[src] = 0;
-    parent[src] = -1;
-    pq.push({0, src});
+        while (!pq.empty()) {
+            auto [d, u] = pq.top();
+            pq.pop();
+            if (d > dist[u]) continue;
 
-    while (!pq.empty()) {
-        auto [d, u] = pq.top();
-        pq.pop();
-
-        if (d > dist[u]) continue;
-
-        for (auto [v, w] : g[u]) {
-            if (dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
-                parent[v] = u;
-                pq.push({dist[v], v});
+            for (auto [v, w] : g[u]) {
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    par[v] = u;
+                    pq.push({dist[v], v});
+                }
             }
         }
     }
-}
+
+    vector<int> get_path(int target) {
+        if (dist[target] == INF) return {};
+        vector<int> path;
+        for (int v = target; v != -1; v = par[v]) path.push_back(v);
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};

@@ -1,23 +1,22 @@
-// requires DSU (data-structures/dsu.cpp)
+// requires DSU
 struct Edge {
     int u, v;
     ll w;
-    bool operator<(const Edge& other) const {
-        return w < other.w;
-    }
+    bool operator<(Edge o) const { return w < o.w; }
 };
 
-pair<ll, vector<Edge>> kruskal(int n, vector<Edge>& edges) {
-    sort(edges.begin(), edges.end());
-    DSU dsu(n);
-    ll total_weight = 0;
-    vector<Edge> mst_edges;
+struct Kruskal {
+    ll cost = 0;
+    vector<Edge> mst;
 
-    for (const auto& edge : edges) {
-        if (dsu.unite(edge.u, edge.v)) {
-            total_weight += edge.w;
-            mst_edges.push_back(edge);
+    Kruskal(int n, auto& edges) {
+        sort(edges.begin(), edges.end());
+        DSU dsu(n);
+        for (auto& e : edges) {
+            if (dsu.unite(e.u, e.v)) {
+                cost += e.w;
+                mst.push_back(e);
+            }
         }
     }
-    return {total_weight, mst_edges};
-}
+};

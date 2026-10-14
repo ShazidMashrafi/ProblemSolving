@@ -1,23 +1,25 @@
-const int N = 1e5 + 10;
-vector<int> g[N];
-int color[N]; // -1: unvisited, 0/1: color
+struct Bipartite {
+    vector<int> color; // 0 or 1, -1: unvisited
+    bool ok = true;
 
-bool dfs_bipartite(int u, int c = 0) {
-    color[u] = c;
-    for (int v : g[u]) {
-        if (color[v] == -1) {
-            if (!dfs_bipartite(v, c ^ 1)) return false;
-        } else if (color[v] == color[u]) {
-            return false;
+    Bipartite(int n, auto& g) : color(n + 1, -1) {
+        auto dfs = [&](auto& self, int u, int c) -> bool {
+            color[u] = c;
+            for (int v : g[u]) {
+                if (color[v] == -1) {
+                    if (!self(self, v, c ^ 1)) return false;
+                } else if (color[v] == color[u]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        for (int i = 1; i <= n; ++i) {
+            if (color[i] == -1 && !dfs(dfs, i, 0)) {
+                ok = false;
+                break;
+            }
         }
     }
-    return true;
-}
-
-bool is_bipartite(int n) {
-    fill(color, color + n + 1, -1);
-    for (int i = 1; i <= n; ++i) {
-        if (color[i] == -1 && !dfs_bipartite(i, 0)) return false;
-    }
-    return true;
-}
+};

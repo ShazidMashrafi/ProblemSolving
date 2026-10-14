@@ -1,29 +1,34 @@
-const long long MOD = 1e9 + 7;
-using Matrix = vector<vector<long long>>;
+struct Mat {
+    int n;
+    vector<vector<ll>> a;
 
-Matrix multiply(const Matrix &A, const Matrix &B, long long m = MOD) {
-    int n = A.size();
-    Matrix result(n, vector<long long>(n, 0));
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            for (int k = 0; k < n; ++k) {
-                result[i][j] = (result[i][j] + A[i][k] * B[k][j]) % m;
+    Mat(int n) : n(n), a(n, vector<ll>(n, 0)) {}
+
+    static Mat id(int n) {
+        Mat res(n);
+        for (int i = 0; i < n; ++i) res.a[i][i] = 1;
+        return res;
+    }
+
+    Mat mul(auto& o, ll m = 1e9 + 7) const {
+        Mat res(n);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                for (int k = 0; k < n; ++k) {
+                    res.a[i][j] = (res.a[i][j] + a[i][k] * o.a[k][j]) % m;
+                }
             }
         }
+        return res;
     }
-    return result;
-}
 
-Matrix matrixExpo(Matrix A, long long power, long long m = MOD) {
-    int n = A.size();
-    Matrix result(n, vector<long long>(n, 0));
-    for (int i = 0; i < n; ++i) result[i][i] = 1;
-    while (power > 0) {
-        if (power & 1) {
-            result = multiply(result, A, m);
+    Mat pow(ll p, ll m = 1e9 + 7) {
+        Mat res = Mat::id(n), base = *this;
+        while (p > 0) {
+            if (p & 1) res = res.mul(base, m);
+            base = base.mul(base, m);
+            p >>= 1;
         }
-        A = multiply(A, A, m);
-        power >>= 1;
+        return res;
     }
-    return result;
-}
+};

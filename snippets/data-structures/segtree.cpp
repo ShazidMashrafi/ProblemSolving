@@ -10,11 +10,11 @@ struct SegTree {
 
     SegTree(int n = 0, T def = 0) : n(n), neutral(def), tree(2 * n, def) {}
 
-    SegTree(const vector<T>& arr, T def = 0) : neutral(def) {
+    SegTree(auto& arr, T def = 0) : neutral(def) {
         build(arr);
     }
 
-    void build(const vector<T>& arr) {
+    void build(auto& arr) {
         n = arr.size();
         tree.assign(2 * n, neutral);
         for (int i = 0; i < n; i++) tree[n + i] = arr[i];

@@ -1,21 +1,22 @@
-const int N = 1e6 + 5;
-const int MOD = 1e9 + 7;
-ll fact[N], invFact[N];
-
 // requires binpow(base, exp, mod)
-void init_fact() {
-    fact[0] = invFact[0] = 1;
-    for (int i = 1; i < N; ++i) fact[i] = fact[i - 1] * i % MOD;
-    invFact[N - 1] = binpow(fact[N - 1], MOD - 2, MOD);
-    for (int i = N - 2; i >= 1; --i) invFact[i] = invFact[i + 1] * (i + 1) % MOD;
-}
+struct Comb {
+    int n, mod;
+    vector<ll> fact, inv;
 
-ll nCr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    return fact[n] * invFact[r] % MOD * invFact[n - r] % MOD;
-}
+    Comb(int n = 1e6 + 5, int mod = 1e9 + 7) : n(n), mod(mod), fact(n), inv(n) {
+        fact[0] = inv[0] = 1;
+        for (int i = 1; i < n; ++i) fact[i] = fact[i - 1] * i % mod;
+        inv[n - 1] = binpow(fact[n - 1], mod - 2, mod);
+        for (int i = n - 2; i >= 1; --i) inv[i] = inv[i + 1] * (i + 1) % mod;
+    }
 
-ll nPr(int n, int r) {
-    if (r < 0 || r > n) return 0;
-    return fact[n] * invFact[n - r] % MOD;
-}
+    ll nCr(int n, int r) {
+        if (r < 0 || r > n) return 0;
+        return fact[n] * inv[r] % mod * inv[n - r] % mod;
+    }
+
+    ll nPr(int n, int r) {
+        if (r < 0 || r > n) return 0;
+        return fact[n] * inv[n - r] % mod;
+    }
+};

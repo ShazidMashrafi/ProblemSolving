@@ -1,4 +1,4 @@
-double ternary_search_real(double l, double r) {
+double ternary_search_real(double l, double r, auto f) {
     for (int iter = 0; iter < 100; ++iter) {
         double m1 = l + (r - l) / 3;
         double m2 = r - (r - l) / 3;
@@ -8,7 +8,7 @@ double ternary_search_real(double l, double r) {
     return l;
 }
 
-ll ternary_search_int(ll l, ll r) {
+ll ternary_search_int(ll l, ll r, auto f) {
     while (r - l >= 3) {
         ll m1 = l + (r - l) / 3;
         ll m2 = r - (r - l) / 3;

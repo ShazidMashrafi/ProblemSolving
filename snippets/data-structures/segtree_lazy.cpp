@@ -1,24 +1,24 @@
-struct LazySegTree {
+struct LazySeg {
     int n;
-    vector<long long> tree, lazy;
+    vector<ll> tree, lazy;
 
-    LazySegTree(int n = 0) : n(n), tree(4 * n, 0), lazy(4 * n, 0) {}
+    LazySeg(int n = 0) : n(n), tree(4 * n, 0), lazy(4 * n, 0) {}
 
-    void build(const vector<long long>& arr, int p, int l, int r) {
+    void build(auto& arr, int p, int l, int r) {
         if (l == r) { tree[p] = arr[l]; return; }
         int mid = (l + r) / 2;
         build(arr, 2 * p, l, mid);
         build(arr, 2 * p + 1, mid + 1, r);
         tree[p] = tree[2 * p] + tree[2 * p + 1];
     }
-    void build(const vector<long long>& arr) {
+    void build(auto& arr) {
         n = arr.size();
         tree.assign(4 * n, 0);
         lazy.assign(4 * n, 0);
         build(arr, 1, 0, n - 1);
     }
 
-    void apply(int p, int l, int r, long long val) {
+    void apply(int p, int l, int r, ll val) {
         tree[p] += val * (r - l + 1);
         lazy[p] += val;
     }
@@ -31,7 +31,7 @@ struct LazySegTree {
         lazy[p] = 0;
     }
 
-    void update(int ql, int qr, long long val, int p, int l, int r) {
+    void update(int ql, int qr, ll val, int p, int l, int r) {
         if (ql <= l && r <= qr) { apply(p, l, r, val); return; }
         push(p, l, r);
         int mid = (l + r) / 2;
@@ -39,16 +39,16 @@ struct LazySegTree {
         if (qr > mid)  update(ql, qr, val, 2 * p + 1, mid + 1, r);
         tree[p] = tree[2 * p] + tree[2 * p + 1];
     }
-    void update(int ql, int qr, long long val) { update(ql, qr, val, 1, 0, n - 1); }
+    void update(int ql, int qr, ll val) { update(ql, qr, val, 1, 0, n - 1); }
 
-    long long query(int ql, int qr, int p, int l, int r) {
+    ll query(int ql, int qr, int p, int l, int r) {
         if (ql <= l && r <= qr) return tree[p];
         push(p, l, r);
         int mid = (l + r) / 2;
-        long long res = 0;
+        ll res = 0;
         if (ql <= mid) res += query(ql, qr, 2 * p, l, mid);
         if (qr > mid)  res += query(ql, qr, 2 * p + 1, mid + 1, r);
         return res;
     }
-    long long query(int ql, int qr) { return query(ql, qr, 1, 0, n - 1); }
+    ll query(int ql, int qr) { return query(ql, qr, 1, 0, n - 1); }
 };

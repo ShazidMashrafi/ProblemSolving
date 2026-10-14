@@ -7,7 +7,7 @@ struct SparseTable {
         return min(a, b); // max(a, b), gcd(a, b), a & b
     }
 
-    SparseTable(const vector<T>& arr) {
+    SparseTable(auto& arr) {
         n = arr.size();
         int k = __lg(n) + 1;
         st.assign(k, vector<T>(n));

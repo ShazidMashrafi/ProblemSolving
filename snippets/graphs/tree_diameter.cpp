@@ -1,21 +1,32 @@
-const int N = 1e5 + 10;
-vector<int> g[N];
-int max_dist, farthest_node;
+struct TreeDia {
+    int dia = 0, u = 1, v = 1;
 
-void dfs_far(int u, int p, int d) {
-    if (d > max_dist) {
-        max_dist = d;
-        farthest_node = u;
-    }
-    for (int v : g[u]) {
-        if (v != p) dfs_far(v, u, d + 1);
-    }
-}
+    TreeDia(int n, auto& g) {
+        auto bfs = [&](int src) {
+            vector<int> dist(n + 1, -1);
+            queue<int> q;
+            dist[src] = 0;
+            q.push(src);
+            int far = src;
 
-int get_diameter(int root = 1) {
-    max_dist = -1;
-    dfs_far(root, 0, 0);
-    max_dist = -1;
-    dfs_far(farthest_node, 0, 0);
-    return max_dist;
-}
+            while (!q.empty()) {
+                int x = q.front();
+                q.pop();
+                if (dist[x] > dist[far]) far = x;
+
+                for (int y : g[x]) {
+                    if (dist[y] == -1) {
+                        dist[y] = dist[x] + 1;
+                        q.push(y);
+                    }
+                }
+            }
+            return pair{far, dist[far]};
+        };
+
+        u = bfs(1).first;
+        auto res = bfs(u);
+        v = res.first;
+        dia = res.second;
+    }
+};

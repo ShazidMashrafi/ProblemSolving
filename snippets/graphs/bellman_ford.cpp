@@ -1,30 +1,28 @@
-const int N = 1005;
-const long long INF = 1e18;
-
 struct Edge {
     int u, v;
-    long long w;
+    ll w;
 };
 
-long long dist[N];
+struct Bellman {
+    ll INF = 1e18;
+    vector<ll> dist;
+    bool neg_cycle = false;
 
-// Returns true if a negative cycle is reachable from src
-bool bellman_ford(int src, int n, const vector<Edge>& edges) {
-    fill(dist, dist + n + 1, INF);
-    dist[src] = 0;
+    Bellman(int n, int src, auto& edges) : dist(n + 1, INF) {
+        dist[src] = 0;
+        for (int i = 1; i <= n - 1; ++i) {
+            for (auto [u, v, w] : edges) {
+                if (dist[u] < INF && dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }
 
-    for (int i = 1; i <= n - 1; ++i) {
-        for (const auto& [u, v, w] : edges) {
+        for (auto [u, v, w] : edges) {
             if (dist[u] < INF && dist[u] + w < dist[v]) {
-                dist[v] = dist[u] + w;
+                neg_cycle = true;
+                break;
             }
         }
     }
-
-    for (const auto& [u, v, w] : edges) {
-        if (dist[u] < INF && dist[u] + w < dist[v]) {
-            return true;
-        }
-    }
-    return false;
-}
+};

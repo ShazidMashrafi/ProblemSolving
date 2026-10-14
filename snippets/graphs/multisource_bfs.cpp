@@ -1,33 +1,28 @@
-const int N = 1005;
-int dist[N][N];
-int n, m;
+struct MSBFS {
+    int n, m;
+    vector<vector<int>> dist;
+    int dx[4] = {0, 0, 1, -1};
+    int dy[4] = {1, -1, 0, 0};
 
-int dx[] = {0, 0, 1, -1, 1, 1, -1, -1}; // first 4 for 4-dir
-int dy[] = {1, -1, 0, 0, 1, -1, 1, -1};
+    MSBFS(int _n, int _m, auto& src)
+        : n(_n), m(_m), dist(n, vector<int>(m, -1)) {
+        queue<pair<int, int>> q;
+        for (auto [x, y] : src) {
+            dist[x][y] = 0;
+            q.push({x, y});
+        }
 
-bool valid(int x, int y) {
-    return x >= 0 && x < n && y >= 0 && y < m;
-}
+        while (!q.empty()) {
+            auto [x, y] = q.front();
+            q.pop();
 
-void multi_source_bfs(const vector<pair<int, int>>& sources) {
-    for (int i = 0; i < n; ++i) fill(dist[i], dist[i] + m, -1);
-    queue<pair<int, int>> q;
-
-    for (auto [x, y] : sources) {
-        dist[x][y] = 0;
-        q.push({x, y});
-    }
-
-    while (!q.empty()) {
-        auto [x, y] = q.front();
-        q.pop();
-
-        for (int i = 0; i < 4; ++i) { // change 4 to 8 for 8-dir
-            int nx = x + dx[i], ny = y + dy[i];
-            if (valid(nx, ny) && dist[nx][ny] == -1) {
-                dist[nx][ny] = dist[x][y] + 1;
-                q.push({nx, ny});
+            for (int i = 0; i < 4; ++i) { // change to 8 for 8-dir
+                int nx = x + dx[i], ny = y + dy[i];
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m && dist[nx][ny] == -1) {
+                    dist[nx][ny] = dist[x][y] + 1;
+                    q.push({nx, ny});
+                }
             }
         }
     }
-}
+};

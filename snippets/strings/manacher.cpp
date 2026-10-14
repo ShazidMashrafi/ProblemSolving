@@ -2,7 +2,8 @@ struct Manacher {
     int n;
     string ms;
     vector<int> p;
-    Manacher(const string &s) {
+
+    Manacher(auto& s) {
         ms = "^#";
         for (char c : s) { ms += c; ms += '#'; }
         ms += '$';
@@ -15,12 +16,14 @@ struct Manacher {
             if (i + p[i] > r) { l = i - p[i]; r = i + p[i]; }
         }
     }
-    // 0-indexed [l, r] in original string
-    bool is_palindrome(int l, int r) {
+
+    // 0-indexed [l, r]
+    bool is_pal(int l, int r) {
         return p[l + r + 2] - 1 >= r - l + 1;
     }
-    // returns {start_idx, max_len} in original string
-    pair<int, int> longest_palindrome() {
+
+    // returns {start_idx, len}
+    pair<int, int> longest() {
         int mx = 0, center = 0;
         for (int i = 1; i < n - 1; i++) {
             if (p[i] > mx) { mx = p[i]; center = i; }
