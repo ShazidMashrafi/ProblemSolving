@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-sync_snippets.py - Compiles snippets/*.cpp and templates/cpt.cpp into cppSnippets.code-snippets
-and sets up symlinks for VS Code and Antigravity IDE.
+sync.py - Compiles snippets/*.cpp, templates/cpt.cpp, and debuggers/codebook_debug.h
+into cppSnippets.code-snippets (for VS Code & Antigravity IDE) and vjudge_codebook.md (for VJudge).
 """
 
 import os
+import re
 import sys
 import json
 import shutil
@@ -16,7 +17,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SNIPPETS_DIR = REPO_ROOT / "snippets"
 OUTPUT_FILE = REPO_ROOT / "cppSnippets.code-snippets"
-EXTRA_SNIPPET_FILES = [REPO_ROOT / "templates" / "cpt.cpp"]
+OUTPUT_CODEBOOK = REPO_ROOT / "vjudge_codebook.md"
+
+EXTRA_SNIPPET_FILES = [
+    REPO_ROOT / "templates" / "cpt.cpp",
+    REPO_ROOT / "debuggers" / "codebook_debug.h",
+]
 
 EDITOR_SNIPPET_DIRS = [
     Path.home() / ".config" / "Code" / "User" / "snippets",
@@ -25,8 +31,16 @@ EDITOR_SNIPPET_DIRS = [
 ]
 
 
+def generate_anchor(title: str) -> str:
+    """Normalizes title into a clean markdown slug."""
+    slug = title.strip().lower()
+    slug = re.sub(r"[^\w\s-]", "", slug)
+    slug = re.sub(r"[\s]+", "-", slug)
+    return slug
+
+
 def snippet_from_file(file_path: Path):
-    """Builds snippet entry dict from a .cpp file."""
+    """Builds snippet entry dict from a .cpp or .h file."""
     try:
         rel_path = file_path.relative_to(SNIPPETS_DIR)
         category = rel_path.parts[0] if len(rel_path.parts) > 1 else "general"
@@ -45,8 +59,74 @@ def snippet_from_file(file_path: Path):
     }
 
 
+def build_vjudge_codebook(snippets_dict: dict) -> str:
+    """Assembles Table of Contents and formatted codeblocks into a single Markdown file."""
+    categories = {}
+    for key, snip in snippets_dict.items():
+        desc = snip.get("description", "")
+        if desc.startswith("[") and "]" in desc:
+            cat = desc[1:desc.index("]")]
+        else:
+            cat = "general"
+        categories.setdefault(cat, []).append((key, snip))
+
+    priority = ["templates", "debuggers"]
+    sorted_cats = sorted(
+        categories.keys(),
+        key=lambda c: (priority.index(c) if c in priority else 999, c),
+    )
+
+    lines = [
+        "### 📖 Competitive Programming Codebook",
+        "",
+        "> Auto-generated from local snippets, templates, and debuggers.",
+        "> **Tip for Lab PCs during contests:** Use `Ctrl + F` to search snippet prefixes directly.",
+        "",
+        "#### 📑 Table of Contents",
+        "",
+    ]
+
+    # Generate TOC
+    for cat in sorted_cats:
+        lines.append(f"- **{cat}**")
+        items = sorted(categories[cat], key=lambda x: x[0])
+        for key, snip in items:
+            anchor = generate_anchor(key)
+            lines.append(f"  - [{key}](#{anchor})")
+        lines.append("")
+
+    # Generate content sections
+    for cat in sorted_cats:
+        lines.append("---")
+        lines.append(f"#### {cat}")
+        lines.append("")
+        items = sorted(categories[cat], key=lambda x: x[0])
+        for key, snip in items:
+            lines.append(f"##### {key}")
+            lines.append("```cpp")
+            lines.extend(snip.get("body", []))
+            lines.append("```")
+            lines.append("")
+
+    return "\n".join(lines).strip() + "\n"
+
+
+def save_snippets(snippets_dict):
+    """Saves dictionary to OUTPUT_FILE sorted by key and updates OUTPUT_CODEBOOK."""
+    sorted_dict = {k: snippets_dict[k] for k in sorted(snippets_dict.keys())}
+
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(sorted_dict, f, indent=4, ensure_ascii=False)
+    print(f"Updated snippets file: {OUTPUT_FILE.relative_to(REPO_ROOT)}")
+
+    codebook_md = build_vjudge_codebook(sorted_dict)
+    with open(OUTPUT_CODEBOOK, "w", encoding="utf-8") as f:
+        f.write(codebook_md)
+    print(f"Updated VJudge codebook: {OUTPUT_CODEBOOK.relative_to(REPO_ROOT)}")
+
+
 def full_build():
-    """Scans all .cpp files in snippets/ and extra template files and builds cppSnippets.code-snippets."""
+    """Scans all snippet and extra files and builds both editor snippets and VJudge codebook."""
     snippets = {}
     if not SNIPPETS_DIR.exists():
         print(f"Error: {SNIPPETS_DIR} does not exist.")
@@ -54,24 +134,24 @@ def full_build():
 
     for root, _, files in os.walk(SNIPPETS_DIR):
         for fname in sorted(files):
-            if fname.endswith(".cpp"):
+            if fname.endswith((".cpp", ".h")):
                 fpath = Path(root) / fname
                 key = fpath.stem
                 snippets[key] = snippet_from_file(fpath)
 
-    # Include extra snippet files (e.g. templates/cpt.cpp)
+    # Include extra snippet files (e.g. templates/cpt.cpp, debuggers/codebook_debug.h)
     for extra_file in EXTRA_SNIPPET_FILES:
         if extra_file.exists():
             snippets[extra_file.stem] = snippet_from_file(extra_file)
 
     save_snippets(snippets)
-    print(f"Successfully compiled {len(snippets)} snippets to {OUTPUT_FILE.relative_to(REPO_ROOT)}")
+    print(f"Successfully compiled {len(snippets)} snippets.")
     return snippets
 
 
 def incremental_update():
     """Updates only changed/added/deleted snippets based on git diff/status."""
-    if not OUTPUT_FILE.exists():
+    if not OUTPUT_FILE.exists() or not OUTPUT_CODEBOOK.exists():
         return full_build()
 
     extra_rel_paths = [str(p.relative_to(REPO_ROOT)) for p in EXTRA_SNIPPET_FILES]
@@ -117,16 +197,16 @@ def incremental_update():
         if status.startswith("R") and len(parts) >= 3:
             old_path = Path(parts[1])
             new_path = Path(parts[2])
-            if old_path.name.endswith(".cpp"):
+            if old_path.suffix in [".cpp", ".h"]:
                 snippets.pop(old_path.stem, None)
                 changed = True
-            if new_path.name.endswith(".cpp") and (REPO_ROOT / new_path).exists():
+            if new_path.suffix in [".cpp", ".h"] and (REPO_ROOT / new_path).exists():
                 snippets[new_path.stem] = snippet_from_file(REPO_ROOT / new_path)
                 changed = True
             continue
 
         file_rel = Path(parts[1])
-        if not file_rel.name.endswith(".cpp"):
+        if file_rel.suffix not in [".cpp", ".h"]:
             continue
 
         key = file_rel.stem
@@ -144,14 +224,6 @@ def incremental_update():
 
     if changed:
         save_snippets(snippets)
-        print(f"Incrementally updated {OUTPUT_FILE.relative_to(REPO_ROOT)}")
-
-
-def save_snippets(snippets_dict):
-    """Saves dictionary to OUTPUT_FILE sorted by key."""
-    sorted_dict = {k: snippets_dict[k] for k in sorted(snippets_dict.keys())}
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(sorted_dict, f, indent=4, ensure_ascii=False)
 
 
 def setup_symlinks():
@@ -178,7 +250,7 @@ def setup_symlinks():
             else:
                 link_path.unlink()
         elif link_path.exists():
-            backup = snip_dir / f"cppSnippets.code-snippets.bak"
+            backup = snip_dir / "cppSnippets.code-snippets.bak"
             print(f"Backing up existing file: {link_path} -> {backup}")
             shutil.move(link_path, backup)
 
@@ -187,7 +259,7 @@ def setup_symlinks():
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Sync snippets to VS Code / Antigravity IDE")
+    parser = argparse.ArgumentParser(description="Sync snippets to VS Code / Antigravity IDE and export VJudge codebook")
     parser.add_argument("--symlink", action="store_true", help="Set up editor symlinks")
     parser.add_argument("--only-changed", action="store_true", help="Incrementally update changed files")
     args = parser.parse_args()

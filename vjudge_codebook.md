@@ -1,0 +1,1572 @@
+### 📖 Competitive Programming Codebook
+
+> Auto-generated from local snippets, templates, and debuggers.
+> **Tip for Lab PCs during contests:** Use `Ctrl + F` to search snippet prefixes directly.
+
+#### 📑 Table of Contents
+
+- **templates**
+  - [cpt](#cpt)
+
+- **debuggers**
+  - [codebook_debug](#codebook_debug)
+
+- **algorithms**
+  - [binsearch](#binsearch)
+  - [mo_algorithm](#mo_algorithm)
+  - [ternary_search](#ternary_search)
+
+- **data-structures**
+  - [bit_trie](#bit_trie)
+  - [dsu](#dsu)
+  - [merge_sort_tree](#merge_sort_tree)
+  - [ordered_set](#ordered_set)
+  - [persistent_segtree](#persistent_segtree)
+  - [segtree](#segtree)
+  - [segtree_lazy](#segtree_lazy)
+  - [sparse_table](#sparse_table)
+  - [trie](#trie)
+
+- **dp**
+  - [lcs](#lcs)
+  - [lis](#lis)
+
+- **geometry**
+  - [convex_hull](#convex_hull)
+  - [polygon_area](#polygon_area)
+
+- **graphs**
+  - [01_bfs](#01_bfs)
+  - [bellman_ford](#bellman_ford)
+  - [bfs](#bfs)
+  - [bipartite](#bipartite)
+  - [bridges_articulation](#bridges_articulation)
+  - [cycle_detect_dfs](#cycle_detect_dfs)
+  - [dfs](#dfs)
+  - [dijkstra](#dijkstra)
+  - [floyd_warshall](#floyd_warshall)
+  - [kruskal](#kruskal)
+  - [lca](#lca)
+  - [multisource_bfs](#multisource_bfs)
+  - [scc](#scc)
+  - [topo_sort](#topo_sort)
+  - [tree_depth_height](#tree_depth_height)
+  - [tree_diameter](#tree_diameter)
+
+- **maths**
+  - [binpow](#binpow)
+  - [combinatorics](#combinatorics)
+  - [matrix_exponentiation](#matrix_exponentiation)
+  - [prime_check](#prime_check)
+  - [sieve](#sieve)
+
+- **strings**
+  - [manacher](#manacher)
+  - [string_hash](#string_hash)
+  - [z_function](#z_function)
+
+---
+#### templates
+
+##### cpt
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#if defined(LOCAL) && !defined(ONLINE_JUDGE)
+#include "debug.h"
+#else
+#define dbg(...)
+#endif
+#define  ll  long long
+#define  endl  '\n'
+#define  ff  first
+#define  ss  second
+#define  pb  push_back
+#define  sz(x)  (int)(x).size()
+#define  all(x)  x.begin(), x.end()
+#define  Dpos(n) fixed << setprecision(n)
+#define  yn(f)  f? cout<<"YES\n":cout<<"NO\n"
+#define  FAST  (ios_base::sync_with_stdio(false), cin.tie(nullptr));
+ll binpow(ll x,ll y,ll m=LLONG_MAX) {ll ans=1;x%=m;while(y){if(y&1)ans=(ans*x)%m;x=(x*x)%m;y>>=1;}return ans;}
+
+void solve()
+{
+    
+}
+
+signed main()
+{
+    FAST;
+    // freopen("input.txt", "r", stdin);
+    // freopen("output.txt", "w", stdout);
+
+    int TCS = 1;
+    // cin >> TCS;
+    for (int TC = 1; TC <= TCS; ++TC)
+    {
+        // cout<<"Case "<<TC<<": ";
+        solve();
+    }
+}
+```
+
+---
+#### debuggers
+
+##### codebook_debug
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+void dbg_out() { cerr << endl; }
+
+void debug(bool x) { cerr << (x ? "true" : "false"); }
+void debug(char x) { cerr << '\'' << x << '\''; }
+void debug(const string &x) { cerr << '"' << x << '"'; }
+void debug(const char *x) { cerr << '"' << x << '"'; }
+
+template<size_t N>
+void debug(const char (&x)[N]) { cerr << '"' << x << '"'; }
+
+template<typename T>
+requires (requires(const T &x) { cerr << x; } && !requires(const T &x) { std::begin(x); })
+void debug(const T &x) { cerr << x; }
+
+template<typename A, typename B>
+void debug(const pair<A, B> &p) {
+    cerr << '('; debug(p.first); cerr << ", "; debug(p.second); cerr << ')';
+}
+
+template<typename... T>
+void debug(const tuple<T...> &t) {
+    cerr << '(';
+    int f = 0;
+    apply([&f](auto... args) { ((cerr << (f++ ? ", " : ""), debug(args)), ...); }, t);
+    cerr << ')';
+}
+
+template<typename T>
+requires (requires(const T &x) { std::begin(x); } && !is_same_v<T, string>)
+void debug(const T &x) {
+    cerr << '{';
+    bool f = 0;
+    for (const auto &i : x) {
+        if (f) cerr << ", ";
+        f = 1;
+        debug(i);
+    }
+    cerr << '}';
+}
+
+template<typename T>
+requires requires(T x) { x.pop(); }
+void debug(T x) {
+    cerr << '{';
+    bool f = 0;
+    while (!x.empty()) {
+        if (f) cerr << ", ";
+        f = 1;
+        if constexpr (requires { x.top(); }) {
+            debug(x.top());
+        } else {
+            debug(x.front());
+        }
+        x.pop();
+    }
+    cerr << '}';
+}
+
+template<typename Head, typename... Tail>
+void dbg_out(const Head &H, const Tail &... T) {
+    debug(H);
+    if (sizeof...(T)) cerr << ", ";
+    dbg_out(T...);
+}
+
+#define dbg(...) cerr << #__VA_ARGS__ << " = ", dbg_out(__VA_ARGS__)
+```
+
+---
+#### algorithms
+
+##### binsearch
+```cpp
+ll lo = 0, hi = 1e18, ans = -1;
+
+auto check = [&](ll mid) -> bool {
+    return true;
+};
+
+while (lo <= hi) {
+    ll mid = lo + (hi - lo) / 2;
+    if (check(mid)) {
+        ans = mid;
+        hi = mid - 1;
+    } else {
+        lo = mid + 1;
+    }
+}
+```
+
+##### mo_algorithm
+```cpp
+struct Mo {
+    int B;
+    struct Query {
+        int l, r, id, b;
+        bool operator<(Query o) const {
+            if (b != o.b) return b < o.b;
+            return (b & 1) ? r < o.r : r > o.r;
+        }
+    };
+
+    int cur_ans = 0;
+    vector<int> freq;
+
+    Mo(int max_val = 1e6 + 5) : freq(max_val, 0) {}
+
+    void add(int idx) {
+        // update freq and cur_ans
+    }
+
+    void remove(int idx) {
+        // update freq and cur_ans
+    }
+
+    vector<int> solve(auto& queries, int n) {
+        B = max(1, (int)(n / sqrt(max(1, (int)queries.size()))));
+        for (auto& q : queries) q.b = q.l / B;
+        sort(queries.begin(), queries.end());
+
+        vector<int> ans(queries.size());
+        int cur_l = 0, cur_r = -1;
+        for (auto& q : queries) {
+            while (cur_l > q.l) add(--cur_l);
+            while (cur_r < q.r) add(++cur_r);
+            while (cur_l < q.l) remove(cur_l++);
+            while (cur_r > q.r) remove(cur_r--);
+            ans[q.id] = cur_ans;
+        }
+        return ans;
+    }
+};
+```
+
+##### ternary_search
+```cpp
+double ternary_search_real(double l, double r, auto f) {
+    for (int iter = 0; iter < 100; ++iter) {
+        double m1 = l + (r - l) / 3;
+        double m2 = r - (r - l) / 3;
+        if (f(m1) < f(m2)) r = m2; // > for max
+        else l = m1;
+    }
+    return l;
+}
+
+ll ternary_search_int(ll l, ll r, auto f) {
+    while (r - l >= 3) {
+        ll m1 = l + (r - l) / 3;
+        ll m2 = r - (r - l) / 3;
+        if (f(m1) < f(m2)) r = m2; // > for max
+        else l = m1;
+    }
+    ll opt = l;
+    for (ll i = l + 1; i <= r; ++i) {
+        if (f(i) < f(opt)) opt = i; // > for max
+    }
+    return opt;
+}
+```
+
+---
+#### data-structures
+
+##### bit_trie
+```cpp
+struct BitTrie {
+    static const int BITS = 30; // 60 for ll
+    struct Node {
+        int next[2] = {};
+        int cnt = 0;
+    };
+    vector<Node> t = {Node()};
+
+    void clear() { t.assign(1, Node()); }
+
+    void insert(int x) {
+        int u = 0;
+        for (int i = BITS - 1; i >= 0; --i) {
+            int b = (x >> i) & 1;
+            if (!t[u].next[b]) { t.emplace_back(); t[u].next[b] = t.size() - 1; }
+            u = t[u].next[b];
+            t[u].cnt++;
+        }
+    }
+
+    bool erase(int x) {
+        int u = 0;
+        for (int i = BITS - 1; i >= 0; --i) {
+            int b = (x >> i) & 1;
+            if (!t[u].next[b] || t[t[u].next[b]].cnt == 0) return false;
+            u = t[u].next[b];
+        }
+        u = 0;
+        for (int i = BITS - 1; i >= 0; --i) {
+            u = t[u].next[(x >> i) & 1];
+            t[u].cnt--;
+        }
+        return true;
+    }
+
+    int max_xor(int x) {
+        int u = 0, res = 0;
+        for (int i = BITS - 1; i >= 0; --i) {
+            int b = (x >> i) & 1;
+            int want = 1 - b;
+            if (t[u].next[want] && t[t[u].next[want]].cnt > 0) {
+                res |= (1 << i);
+                u = t[u].next[want];
+            } else {
+                u = t[u].next[b];
+            }
+        }
+        return res;
+    }
+
+    int min_xor(int x) {
+        int u = 0, res = 0;
+        for (int i = BITS - 1; i >= 0; --i) {
+            int b = (x >> i) & 1;
+            if (t[u].next[b] && t[t[u].next[b]].cnt > 0) {
+                u = t[u].next[b];
+            } else {
+                res |= (1 << i);
+                u = t[u].next[1 - b];
+            }
+        }
+        return res;
+    }
+
+    // Count elements v such that (x ^ v) < k
+    int count_xor_lt(int x, int k) {
+        int u = 0, res = 0;
+        for (int i = BITS - 1; i >= 0; --i) {
+            int b = (x >> i) & 1;
+            int kb = (k >> i) & 1;
+            if (kb) {
+                if (t[u].next[b]) res += t[t[u].next[b]].cnt;
+                u = t[u].next[1 - b];
+            } else {
+                u = t[u].next[b];
+            }
+            if (!u) break;
+        }
+        return res;
+    }
+};
+```
+
+##### dsu
+```cpp
+struct DSU {
+    vector<int> par, siz;
+    int comps;
+
+    DSU(int n) {
+        par.resize(n + 1);
+        iota(par.begin(), par.end(), 0);
+        siz.assign(n + 1, 1);
+        comps = n;
+    }
+
+    int find(int u) {
+        return par[u] == u ? u : par[u] = find(par[u]);
+    }
+
+    bool same(int u, int v) {
+        return find(u) == find(v);
+    }
+
+    bool unite(int u, int v) {
+        u = find(u); v = find(v);
+        if (u == v) return false;
+        if (siz[u] < siz[v]) swap(u, v);
+        par[v] = u;
+        siz[u] += siz[v];
+        comps--;
+        return true;
+    }
+
+    int size(int u) {
+        return siz[find(u)];
+    }
+};
+```
+
+##### merge_sort_tree
+```cpp
+struct MSTree {
+    int n;
+    vector<vector<int>> tree;
+
+    MSTree(auto& arr) {
+        n = arr.size();
+        tree.resize(4 * n);
+        build(arr, 1, 0, n - 1);
+    }
+
+    void build(auto& arr, int p, int l, int r) {
+        if (l == r) { tree[p] = {arr[l]}; return; }
+        int mid = (l + r) / 2;
+        build(arr, 2 * p, l, mid);
+        build(arr, 2 * p + 1, mid + 1, r);
+        merge(tree[2 * p].begin(), tree[2 * p].end(),
+              tree[2 * p + 1].begin(), tree[2 * p + 1].end(),
+              back_inserter(tree[p]));
+    }
+
+    // Count elements <= x in range [ql, qr]
+    int count_le(int ql, int qr, int x, int p, int l, int r) {
+        if (ql <= l && r <= qr) {
+            return upper_bound(tree[p].begin(), tree[p].end(), x) - tree[p].begin();
+        }
+        int mid = (l + r) / 2, res = 0;
+        if (ql <= mid) res += count_le(ql, qr, x, 2 * p, l, mid);
+        if (qr > mid)  res += count_le(ql, qr, x, 2 * p + 1, mid + 1, r);
+        return res;
+    }
+    int count_le(int ql, int qr, int x) { return count_le(ql, qr, x, 1, 0, n - 1); }
+};
+```
+
+##### ordered_set
+```cpp
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+
+typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
+// find_by_order(k) : returns iterator to kth smallest element (0-indexed)
+// order_of_key(v)  : returns number of elements strictly smaller than v
+```
+
+##### persistent_segtree
+```cpp
+struct PST {
+    struct Node {
+        int l = 0, r = 0;
+        int count = 0;
+    };
+    int n;
+    vector<Node> tree;
+    vector<int> roots;
+
+    PST(int n = 0) : n(n) {
+        tree.emplace_back();
+        roots.push_back(0);
+    }
+
+    int update(int prev_root, int l, int r, int pos, int val) {
+        int cur = tree.size();
+        tree.push_back(tree[prev_root]);
+        tree[cur].count += val;
+        if (l == r) return cur;
+        int mid = (l + r) / 2;
+        if (pos <= mid)
+            tree[cur].l = update(tree[prev_root].l, l, mid, pos, val);
+        else
+            tree[cur].r = update(tree[prev_root].r, mid + 1, r, pos, val);
+        return cur;
+    }
+    void update(int pos, int val) {
+        roots.push_back(update(roots.back(), 0, n - 1, pos, val));
+    }
+
+    int query(int node, int l, int r, int ql, int qr) {
+        if (!node || ql > r || qr < l) return 0;
+        if (ql <= l && r <= qr) return tree[node].count;
+        int mid = (l + r) / 2;
+        return query(tree[node].l, l, mid, ql, qr) + query(tree[node].r, mid + 1, r, ql, qr);
+    }
+    int query(int version, int ql, int qr) {
+        return query(roots[version], 0, n - 1, ql, qr);
+    }
+
+    int kth(int node_l, int node_r, int l, int r, int k) {
+        if (l == r) return l;
+        int mid = (l + r) / 2;
+        int left_count = tree[tree[node_r].l].count - tree[tree[node_l].l].count;
+        if (k <= left_count)
+            return kth(tree[node_l].l, tree[node_r].l, l, mid, k);
+        else
+            return kth(tree[node_l].r, tree[node_r].r, mid + 1, r, k - left_count);
+    }
+    int kth(int version_l, int version_r, int k) {
+        return kth(roots[version_l], roots[version_r], 0, n - 1, k);
+    }
+};
+```
+
+##### segtree
+```cpp
+template <typename T>
+struct SegTree {
+    int n;
+    vector<T> tree;
+    T neutral = 0; // min: INF, max: -INF, sum/gcd: 0
+
+    T merge(T a, T b) {
+        return a + b; // min(a,b), max(a,b), gcd(a,b)
+    }
+
+    SegTree(int n = 0, T def = 0) : n(n), neutral(def), tree(2 * n, def) {}
+
+    SegTree(auto& arr, T def = 0) : neutral(def) {
+        build(arr);
+    }
+
+    void build(auto& arr) {
+        n = arr.size();
+        tree.assign(2 * n, neutral);
+        for (int i = 0; i < n; i++) tree[n + i] = arr[i];
+        for (int i = n - 1; i > 0; --i) tree[i] = merge(tree[i << 1], tree[i << 1 | 1]);
+    }
+
+    void update(int p, T val) {
+        for (tree[p += n] = val; p > 1; p >>= 1) {
+            tree[p >> 1] = merge(tree[p & ~1], tree[p | 1]);
+        }
+    }
+
+    void add(int p, T val) {
+        update(p, merge(tree[p + n], val));
+    }
+
+    T query(int l, int r) {
+        T resL = neutral, resR = neutral;
+        for (l += n, r += n + 1; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) resL = merge(resL, tree[l++]);
+            if (r & 1) resR = merge(tree[--r], resR);
+        }
+        return merge(resL, resR);
+    }
+};
+```
+
+##### segtree_lazy
+```cpp
+struct LazySeg {
+    int n;
+    vector<ll> tree, lazy;
+
+    LazySeg(int n = 0) : n(n), tree(4 * n, 0), lazy(4 * n, 0) {}
+
+    void build(auto& arr, int p, int l, int r) {
+        if (l == r) { tree[p] = arr[l]; return; }
+        int mid = (l + r) / 2;
+        build(arr, 2 * p, l, mid);
+        build(arr, 2 * p + 1, mid + 1, r);
+        tree[p] = tree[2 * p] + tree[2 * p + 1];
+    }
+    void build(auto& arr) {
+        n = arr.size();
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+        build(arr, 1, 0, n - 1);
+    }
+
+    void apply(int p, int l, int r, ll val) {
+        tree[p] += val * (r - l + 1);
+        lazy[p] += val;
+    }
+
+    void push(int p, int l, int r) {
+        if (!lazy[p]) return;
+        int mid = (l + r) / 2;
+        apply(2 * p, l, mid, lazy[p]);
+        apply(2 * p + 1, mid + 1, r, lazy[p]);
+        lazy[p] = 0;
+    }
+
+    void update(int ql, int qr, ll val, int p, int l, int r) {
+        if (ql <= l && r <= qr) { apply(p, l, r, val); return; }
+        push(p, l, r);
+        int mid = (l + r) / 2;
+        if (ql <= mid) update(ql, qr, val, 2 * p, l, mid);
+        if (qr > mid)  update(ql, qr, val, 2 * p + 1, mid + 1, r);
+        tree[p] = tree[2 * p] + tree[2 * p + 1];
+    }
+    void update(int ql, int qr, ll val) { update(ql, qr, val, 1, 0, n - 1); }
+
+    ll query(int ql, int qr, int p, int l, int r) {
+        if (ql <= l && r <= qr) return tree[p];
+        push(p, l, r);
+        int mid = (l + r) / 2;
+        ll res = 0;
+        if (ql <= mid) res += query(ql, qr, 2 * p, l, mid);
+        if (qr > mid)  res += query(ql, qr, 2 * p + 1, mid + 1, r);
+        return res;
+    }
+    ll query(int ql, int qr) { return query(ql, qr, 1, 0, n - 1); }
+};
+```
+
+##### sparse_table
+```cpp
+template <typename T>
+struct SparseTable {
+    int n;
+    vector<vector<T>> st;
+
+    T merge(T a, T b) {
+        return min(a, b); // max(a, b), gcd(a, b), a & b
+    }
+
+    SparseTable(auto& arr) {
+        n = arr.size();
+        int k = __lg(n) + 1;
+        st.assign(k, vector<T>(n));
+        st[0] = arr;
+        for (int j = 1; j < k; ++j) {
+            for (int i = 0; i + (1 << j) <= n; ++i) {
+                st[j][i] = merge(st[j - 1][i], st[j - 1][i + (1 << (j - 1))]);
+            }
+        }
+    }
+
+    T query(int l, int r) {
+        int j = __lg(r - l + 1);
+        return merge(st[j][l], st[j][r - (1 << j) + 1]);
+    }
+};
+```
+
+##### trie
+```cpp
+struct Trie {
+    struct Node {
+        int next[26] = {};
+        int cnt = 0, end = 0;
+    };
+    vector<Node> t = {Node()};
+
+    void clear() { t.assign(1, Node()); }
+
+    void insert(auto& s) {
+        int u = 0;
+        for (char c : s) {
+            int b = c - 'a';
+            if (!t[u].next[b]) { t.emplace_back(); t[u].next[b] = t.size() - 1; }
+            u = t[u].next[b];
+            t[u].cnt++;
+        }
+        t[u].end++;
+    }
+
+    int count(auto& s, bool exact = false) {
+        int u = 0;
+        for (char c : s) {
+            int b = c - 'a';
+            if (!t[u].next[b]) return 0;
+            u = t[u].next[b];
+        }
+        return exact ? t[u].end : t[u].cnt;
+    }
+
+    bool erase(auto& s) {
+        if (!count(s, true)) return false;
+        int u = 0;
+        for (char c : s) {
+            u = t[u].next[c - 'a'];
+            t[u].cnt--;
+        }
+        t[u].end--;
+        return true;
+    }
+};
+```
+
+---
+#### dp
+
+##### lcs
+```cpp
+struct LCS {
+    string ans;
+    int len = 0;
+
+    LCS(auto& s, auto& t) {
+        int n = s.size(), m = t.size();
+        vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (s[i] == t[j]) dp[i + 1][j + 1] = dp[i][j] + 1;
+                else dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);
+            }
+        }
+
+        int i = n, j = m;
+        while (i > 0 && j > 0) {
+            if (s[i - 1] == t[j - 1]) {
+                ans += s[i - 1];
+                --i; --j;
+            } else if (dp[i - 1][j] > dp[i][j - 1]) {
+                --i;
+            } else {
+                --j;
+            }
+        }
+        reverse(ans.begin(), ans.end());
+        len = ans.size();
+    }
+};
+```
+
+##### lis
+```cpp
+struct LIS {
+    vector<int> idx;
+    int len = 0;
+
+    LIS(auto& a) {
+        int n = a.size();
+        vector<int> tail, t_idx, par(n, -1);
+        for (int i = 0; i < n; ++i) {
+            int p = lower_bound(tail.begin(), tail.end(), a[i]) - tail.begin(); // upper_bound for non-decreasing
+            if (p == (int)tail.size()) {
+                tail.push_back(a[i]);
+                t_idx.push_back(i);
+            } else {
+                tail[p] = a[i];
+                t_idx[p] = i;
+            }
+            if (p > 0) par[i] = t_idx[p - 1];
+        }
+
+        for (int c = t_idx.empty() ? -1 : t_idx.back(); c != -1; c = par[c])
+            idx.push_back(c);
+        reverse(idx.begin(), idx.end());
+        len = idx.size();
+    }
+};
+```
+
+---
+#### geometry
+
+##### convex_hull
+```cpp
+struct Point {
+    ll x, y;
+    bool operator<(Point o) const { return x == o.x ? y < o.y : x < o.x; }
+    bool operator==(Point o) const { return x == o.x && y == o.y; }
+};
+
+ll cross(Point a, Point b, Point c) {
+    return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+struct Hull {
+    vector<Point> h;
+
+    Hull(auto pts) { // Monotone Chain
+        int n = pts.size(), k = 0;
+        if (n <= 2) { h = pts; return; }
+        h.resize(2 * n);
+        sort(pts.begin(), pts.end());
+        pts.erase(unique(pts.begin(), pts.end()), pts.end());
+        n = pts.size();
+
+        for (int i = 0; i < n; ++i) {
+            while (k >= 2 && cross(h[k - 2], h[k - 1], pts[i]) <= 0) k--;
+            h[k++] = pts[i];
+        }
+        for (int i = n - 2, t = k + 1; i >= 0; --i) {
+            while (k >= t && cross(h[k - 2], h[k - 1], pts[i]) <= 0) k--;
+            h[k++] = pts[i];
+        }
+        h.resize(k - 1);
+    }
+};
+```
+
+##### polygon_area
+```cpp
+struct Point {
+    ll x, y;
+};
+
+// 2 * Area (exact integer, / 2.0 for double)
+ll poly_area2(auto& p) {
+    ll area = 0;
+    int n = p.size();
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        area += p[i].x * p[j].y - p[j].x * p[i].y;
+    }
+    return abs(area);
+}
+```
+
+---
+#### graphs
+
+##### 01_bfs
+```cpp
+struct BFS01 {
+    int INF = 1e9 + 10;
+    vector<int> dist, par;
+
+    BFS01(int n, int src, auto& g) : dist(n + 1, INF), par(n + 1, -1) {
+        deque<int> dq;
+        dist[src] = 0;
+        dq.push_back(src);
+        while (!dq.empty()) {
+            int u = dq.front(); dq.pop_front();
+            for (auto [v, w] : g[u]) {
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    par[v] = u;
+                    if (w == 0) dq.push_front(v);
+                    else dq.push_back(v);
+                }
+            }
+        }
+    }
+
+    vector<int> get_path(int target) {
+        if (dist[target] >= INF) return {};
+        vector<int> path;
+        for (int v = target; v != -1; v = par[v]) path.push_back(v);
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
+```
+
+##### bellman_ford
+```cpp
+struct Edge {
+    int u, v;
+    ll w;
+};
+
+struct Bellman {
+    ll INF = 1e18;
+    vector<ll> dist;
+    bool neg_cycle = false;
+
+    Bellman(int n, int src, auto& edges) : dist(n + 1, INF) {
+        dist[src] = 0;
+        for (int i = 1; i <= n - 1; ++i) {
+            for (auto [u, v, w] : edges) {
+                if (dist[u] < INF && dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                }
+            }
+        }
+
+        for (auto [u, v, w] : edges) {
+            if (dist[u] < INF && dist[u] + w < dist[v]) {
+                neg_cycle = true;
+                break;
+            }
+        }
+    }
+};
+```
+
+##### bfs
+```cpp
+struct BFS {
+    vector<int> dist, par;
+
+    BFS(int n, int src, auto& g) : dist(n + 1, -1), par(n + 1, -1) {
+        queue<int> q;
+        dist[src] = 0;
+        q.push(src);
+        while (!q.empty()) {
+            int u = q.front(); q.pop();
+            for (int v : g[u]) {
+                if (dist[v] == -1) {
+                    dist[v] = dist[u] + 1;
+                    par[v] = u;
+                    q.push(v);
+                }
+            }
+        }
+    }
+
+    vector<int> get_path(int target) {
+        if (dist[target] == -1) return {};
+        vector<int> path;
+        for (int v = target; v != -1; v = par[v]) path.push_back(v);
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
+```
+
+##### bipartite
+```cpp
+struct Bipartite {
+    vector<int> color; // 0 or 1, -1: unvisited
+    bool ok = true;
+
+    Bipartite(int n, auto& g) : color(n + 1, -1) {
+        auto dfs = [&](auto& self, int u, int c) -> bool {
+            color[u] = c;
+            for (int v : g[u]) {
+                if (color[v] == -1) {
+                    if (!self(self, v, c ^ 1)) return false;
+                } else if (color[v] == color[u]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        for (int i = 1; i <= n; ++i) {
+            if (color[i] == -1 && !dfs(dfs, i, 0)) {
+                ok = false;
+                break;
+            }
+        }
+    }
+};
+```
+
+##### bridges_articulation
+```cpp
+struct Bridges {
+    int timer = 0;
+    vector<int> tin, low;
+    vector<bool> cut;
+    vector<pair<int, int>> bridges;
+
+    Bridges(int n, auto& g) : tin(n + 1, 0), low(n + 1, 0), cut(n + 1, false) {
+        auto dfs = [&](auto& self, int u, int p) -> void {
+            tin[u] = low[u] = ++timer;
+            int children = 0;
+
+            for (int v : g[u]) {
+                if (v == p) continue; // for multigraph: skip edge_id instead of p
+                if (tin[v]) {
+                    low[u] = min(low[u], tin[v]);
+                } else {
+                    self(self, v, u);
+                    low[u] = min(low[u], low[v]);
+                    if (low[v] > tin[u]) bridges.push_back({u, v});
+                    if (low[v] >= tin[u] && p != 0) cut[u] = true;
+                    children++;
+                }
+            }
+            if (p == 0 && children > 1) cut[u] = true;
+        };
+
+        for (int i = 1; i <= n; ++i) {
+            if (!tin[i]) dfs(dfs, i, 0);
+        }
+    }
+};
+```
+
+##### cycle_detect_dfs
+```cpp
+struct Cycle {
+    vector<int> vis; // 0: unvisited, 1: on stack, 2: done
+    vector<int> cycle;
+    bool has_cyc = false;
+
+    Cycle(int n, auto& g) : vis(n + 1, 0) {
+        vector<int> par(n + 1, -1);
+        auto dfs = [&](auto& self, int u) -> bool {
+            vis[u] = 1;
+            for (int v : g[u]) {
+                if (vis[v] == 1) {
+                    cycle.push_back(v);
+                    for (int cur = u; cur != v; cur = par[cur]) cycle.push_back(cur);
+                    cycle.push_back(v);
+                    reverse(cycle.begin(), cycle.end());
+                    return true;
+                }
+                if (!vis[v]) {
+                    par[v] = u;
+                    if (self(self, v)) return true;
+                }
+            }
+            vis[u] = 2;
+            return false;
+        };
+
+        for (int i = 1; i <= n; ++i) {
+            if (!vis[i] && dfs(dfs, i)) {
+                has_cyc = true;
+                break;
+            }
+        }
+    }
+};
+```
+
+##### dfs
+```cpp
+// lambda DFS
+auto dfs = [&](auto& self, int u, int p) -> void {
+    for (int v : g[u]) {
+        if (v == p) continue;
+        self(self, v, u);
+    }
+};
+dfs(dfs, 1, 0);
+```
+
+##### dijkstra
+```cpp
+struct Dijkstra {
+    ll INF = 1e18;
+    vector<ll> dist;
+    vector<int> par;
+
+    Dijkstra(int n, int src, auto& g) : dist(n + 1, INF), par(n + 1, -1) {
+        priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<>> pq;
+        dist[src] = 0;
+        pq.push({0, src});
+
+        while (!pq.empty()) {
+            auto [d, u] = pq.top();
+            pq.pop();
+            if (d > dist[u]) continue;
+
+            for (auto [v, w] : g[u]) {
+                if (dist[u] + w < dist[v]) {
+                    dist[v] = dist[u] + w;
+                    par[v] = u;
+                    pq.push({dist[v], v});
+                }
+            }
+        }
+    }
+
+    vector<int> get_path(int target) {
+        if (dist[target] == INF) return {};
+        vector<int> path;
+        for (int v = target; v != -1; v = par[v]) path.push_back(v);
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
+```
+
+##### floyd_warshall
+```cpp
+struct Floyd {
+    ll INF = 1e18;
+    int n;
+    vector<vector<ll>> dist;
+    bool neg_cycle = false;
+
+    Floyd(int _n, auto& adj_mat) : n(_n), dist(adj_mat) {
+        for (int k = 1; k <= n; ++k) {
+            for (int i = 1; i <= n; ++i) {
+                for (int j = 1; j <= n; ++j) {
+                    if (dist[i][k] < INF && dist[k][j] < INF)
+                        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+            }
+        }
+
+        for (int i = 1; i <= n; ++i) {
+            if (dist[i][i] < 0) neg_cycle = true;
+        }
+    }
+};
+```
+
+##### kruskal
+```cpp
+// requires DSU
+struct Edge {
+    int u, v;
+    ll w;
+    bool operator<(Edge o) const { return w < o.w; }
+};
+
+struct Kruskal {
+    ll cost = 0;
+    vector<Edge> mst;
+
+    Kruskal(int n, auto& edges) {
+        sort(edges.begin(), edges.end());
+        DSU dsu(n);
+        for (auto& e : edges) {
+            if (dsu.unite(e.u, e.v)) {
+                cost += e.w;
+                mst.push_back(e);
+            }
+        }
+    }
+};
+```
+
+##### lca
+```cpp
+struct LCA {
+    int n, LOGN;
+    vector<int> depth;
+    vector<vector<int>> up;
+
+    LCA(int _n, int root, auto& g) : n(_n), depth(n + 1, 0) {
+        LOGN = __lg(n) + 2;
+        up.assign(n + 1, vector<int>(LOGN, 0));
+
+        auto dfs = [&](auto& self, int u, int p, int d) -> void {
+            depth[u] = d;
+            up[u][0] = p;
+            for (int j = 1; j < LOGN; ++j) {
+                up[u][j] = up[up[u][j - 1]][j - 1];
+            }
+            for (int v : g[u]) {
+                if (v != p) self(self, v, u, d + 1);
+            }
+        };
+        dfs(dfs, root, 0, 1);
+    }
+
+    int get_lca(int u, int v) {
+        if (depth[u] < depth[v]) swap(u, v);
+        for (int j = LOGN - 1; j >= 0; --j) {
+            if (depth[u] - (1 << j) >= depth[v]) u = up[u][j];
+        }
+        if (u == v) return u;
+        for (int j = LOGN - 1; j >= 0; --j) {
+            if (up[u][j] != up[v][j]) {
+                u = up[u][j];
+                v = up[v][j];
+            }
+        }
+        return up[u][0];
+    }
+
+    int get_dist(int u, int v) {
+        return depth[u] + depth[v] - 2 * depth[get_lca(u, v)];
+    }
+
+    int kth_ancestor(int u, int k) {
+        for (int j = 0; j < LOGN; ++j) {
+            if (k & (1 << j)) u = up[u][j];
+        }
+        return u;
+    }
+};
+```
+
+##### multisource_bfs
+```cpp
+struct MSBFS {
+    int n, m;
+    vector<vector<int>> dist;
+    int dx[4] = {0, 0, 1, -1};
+    int dy[4] = {1, -1, 0, 0};
+
+    MSBFS(int _n, int _m, auto& src)
+        : n(_n), m(_m), dist(n, vector<int>(m, -1)) {
+        queue<pair<int, int>> q;
+        for (auto [x, y] : src) {
+            dist[x][y] = 0;
+            q.push({x, y});
+        }
+
+        while (!q.empty()) {
+            auto [x, y] = q.front();
+            q.pop();
+
+            for (int i = 0; i < 4; ++i) { // change to 8 for 8-dir
+                int nx = x + dx[i], ny = y + dy[i];
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m && dist[nx][ny] == -1) {
+                    dist[nx][ny] = dist[x][y] + 1;
+                    q.push({nx, ny});
+                }
+            }
+        }
+    }
+};
+```
+
+##### scc
+```cpp
+struct SCC {
+    int n, timer = 0, scc_cnt = 0;
+    vector<int> tin, low, comp, st;
+    vector<bool> in_stack;
+    vector<vector<int>> sccs;
+
+    SCC(int _n, auto& g)
+        : n(_n), tin(n + 1, 0), low(n + 1, 0), comp(n + 1, 0), in_stack(n + 1, false) {
+        auto dfs = [&](auto& self, int u) -> void {
+            tin[u] = low[u] = ++timer;
+            st.push_back(u);
+            in_stack[u] = true;
+
+            for (int v : g[u]) {
+                if (!tin[v]) {
+                    self(self, v);
+                    low[u] = min(low[u], low[v]);
+                } else if (in_stack[v]) {
+                    low[u] = min(low[u], tin[v]);
+                }
+            }
+
+            if (low[u] == tin[u]) {
+                sccs.push_back({});
+                scc_cnt++;
+                while (true) {
+                    int v = st.back();
+                    st.pop_back();
+                    in_stack[v] = false;
+                    comp[v] = scc_cnt;
+                    sccs.back().push_back(v);
+                    if (u == v) break;
+                }
+            }
+        };
+
+        for (int i = 1; i <= n; ++i) {
+            if (!tin[i]) dfs(dfs, i);
+        }
+    }
+};
+```
+
+##### topo_sort
+```cpp
+struct Topo {
+    vector<int> order;
+    bool dag = true;
+
+    Topo(int n, auto& g) {
+        vector<int> in(n + 1, 0);
+        for (int u = 1; u <= n; ++u) {
+            for (int v : g[u]) in[v]++;
+        }
+
+        queue<int> q;
+        for (int i = 1; i <= n; ++i) {
+            if (in[i] == 0) q.push(i);
+        }
+
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            order.push_back(u);
+
+            for (int v : g[u]) {
+                if (--in[v] == 0) q.push(v);
+            }
+        }
+
+        if ((int)order.size() < n) dag = false;
+    }
+};
+```
+
+##### tree_depth_height
+```cpp
+struct Tree {
+    vector<int> dep, h, sz, par;
+
+    Tree(int n, int root, auto& g)
+        : dep(n + 1, 0), h(n + 1, 0), sz(n + 1, 1), par(n + 1, 0) {
+        auto dfs = [&](auto& self, int u, int p) -> void {
+            par[u] = p;
+            dep[u] = dep[p] + 1;
+            for (int v : g[u]) {
+                if (v == p) continue;
+                self(self, v, u);
+                h[u] = max(h[u], h[v] + 1);
+                sz[u] += sz[v];
+            }
+        };
+        dfs(dfs, root, 0);
+    }
+};
+```
+
+##### tree_diameter
+```cpp
+struct TreeDia {
+    int dia = 0, u = 1, v = 1;
+
+    TreeDia(int n, auto& g) {
+        auto bfs = [&](int src) {
+            vector<int> dist(n + 1, -1);
+            queue<int> q;
+            dist[src] = 0;
+            q.push(src);
+            int far = src;
+
+            while (!q.empty()) {
+                int x = q.front();
+                q.pop();
+                if (dist[x] > dist[far]) far = x;
+
+                for (int y : g[x]) {
+                    if (dist[y] == -1) {
+                        dist[y] = dist[x] + 1;
+                        q.push(y);
+                    }
+                }
+            }
+            return pair{far, dist[far]};
+        };
+
+        u = bfs(1).first;
+        auto res = bfs(u);
+        v = res.first;
+        dia = res.second;
+    }
+};
+```
+
+---
+#### maths
+
+##### binpow
+```cpp
+ll binpow(ll a, ll b, ll mod = 1e9 + 7) {
+    ll res = 1;
+    a %= mod;
+    while (b > 0) {
+        if (b & 1) res = res * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return res;
+}
+
+ll inv(ll a, ll m = 1e9 + 7) {
+    return binpow(a, m - 2, m);
+}
+```
+
+##### combinatorics
+```cpp
+// requires binpow(base, exp, mod)
+struct Comb {
+    int n, mod;
+    vector<ll> fact, inv;
+
+    Comb(int n = 1e6 + 5, int mod = 1e9 + 7) : n(n), mod(mod), fact(n), inv(n) {
+        fact[0] = inv[0] = 1;
+        for (int i = 1; i < n; ++i) fact[i] = fact[i - 1] * i % mod;
+        inv[n - 1] = binpow(fact[n - 1], mod - 2, mod);
+        for (int i = n - 2; i >= 1; --i) inv[i] = inv[i + 1] * (i + 1) % mod;
+    }
+
+    ll nCr(int n, int r) {
+        if (r < 0 || r > n) return 0;
+        return fact[n] * inv[r] % mod * inv[n - r] % mod;
+    }
+
+    ll nPr(int n, int r) {
+        if (r < 0 || r > n) return 0;
+        return fact[n] * inv[n - r] % mod;
+    }
+};
+```
+
+##### matrix_exponentiation
+```cpp
+struct Mat {
+    int n;
+    vector<vector<ll>> a;
+
+    Mat(int n) : n(n), a(n, vector<ll>(n, 0)) {}
+
+    static Mat id(int n) {
+        Mat res(n);
+        for (int i = 0; i < n; ++i) res.a[i][i] = 1;
+        return res;
+    }
+
+    Mat mul(auto& o, ll m = 1e9 + 7) const {
+        Mat res(n);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                for (int k = 0; k < n; ++k) {
+                    res.a[i][j] = (res.a[i][j] + a[i][k] * o.a[k][j]) % m;
+                }
+            }
+        }
+        return res;
+    }
+
+    Mat pow(ll p, ll m = 1e9 + 7) {
+        Mat res = Mat::id(n), base = *this;
+        while (p > 0) {
+            if (p & 1) res = res.mul(base, m);
+            base = base.mul(base, m);
+            p >>= 1;
+        }
+        return res;
+    }
+};
+```
+
+##### prime_check
+```cpp
+bool prime_check(ll n) {
+    if (n < 2) return false;
+    if (n == 2 || n == 3) return true;
+    if (n % 2 == 0 || n % 3 == 0) return false;
+    for (ll i = 5; i * i <= n; i += 6) {
+        if (n % i == 0 || n % (i + 2) == 0) return false;
+    }
+    return true;
+}
+```
+
+##### sieve
+```cpp
+struct Sieve {
+    vector<int> spf, primes;
+
+    Sieve(int n = 1e7 + 10) : spf(n, 0) {
+        for (int i = 2; i < n; ++i) {
+            if (!spf[i]) {
+                spf[i] = i;
+                primes.push_back(i);
+            }
+            for (int p : primes) {
+                if (p > spf[i] || 1LL * i * p >= n) break;
+                spf[i * p] = p;
+            }
+        }
+    }
+
+    vector<int> factors(int x) {
+        vector<int> res;
+        while (x > 1) {
+            res.push_back(spf[x]);
+            x /= spf[x];
+        }
+        return res;
+    }
+};
+```
+
+---
+#### strings
+
+##### manacher
+```cpp
+struct Manacher {
+    int n;
+    string ms;
+    vector<int> p;
+
+    Manacher(auto& s) {
+        ms = "^#";
+        for (char c : s) { ms += c; ms += '#'; }
+        ms += '$';
+        n = ms.size();
+        p.assign(n, 0);
+        int l = 1, r = 1;
+        for (int i = 1; i < n - 1; i++) {
+            p[i] = max(0, min(r - i, p[l + (r - i)]));
+            while (ms[i - p[i]] == ms[i + p[i]]) p[i]++;
+            if (i + p[i] > r) { l = i - p[i]; r = i + p[i]; }
+        }
+    }
+
+    // 0-indexed [l, r]
+    bool is_pal(int l, int r) {
+        return p[l + r + 2] - 1 >= r - l + 1;
+    }
+
+    // returns {start_idx, len}
+    pair<int, int> longest() {
+        int mx = 0, center = 0;
+        for (int i = 1; i < n - 1; i++) {
+            if (p[i] > mx) { mx = p[i]; center = i; }
+        }
+        int len = mx - 1;
+        return {(center - len) / 2, len};
+    }
+};
+```
+
+##### string_hash
+```cpp
+const int MOD1 = 127657753, MOD2 = 987654319;
+const int base1 = 137, base2 = 277;
+const int MAXN = 1e6 + 9;
+vector<pair<int, int>> pw(MAXN), inv_pw(MAXN);
+
+// requires binpow(base, exp, mod)
+void precal_pow() {
+    if (pw[0].first != 0) return;
+    pw[0] = inv_pw[0] = {1, 1};
+    int inv_b1 = binpow(base1, MOD1 - 2, MOD1);
+    int inv_b2 = binpow(base2, MOD2 - 2, MOD2);
+    for (int i = 1; i < MAXN; i++) {
+        pw[i].first = (1LL * pw[i - 1].first * base1) % MOD1;
+        pw[i].second = (1LL * pw[i - 1].second * base2) % MOD2;
+        inv_pw[i].first = (1LL * inv_pw[i - 1].first * inv_b1) % MOD1;
+        inv_pw[i].second = (1LL * inv_pw[i - 1].second * inv_b2) % MOD2;
+    }
+}
+
+struct Hashing {
+    int n;
+    string s;
+    vector<pair<int, int>> hs, rhs;
+
+    Hashing(auto& _s) {
+        precal_pow();
+        s = _s;
+        n = s.size();
+        hs.assign(n + 1, {0, 0});
+        rhs.assign(n + 1, {0, 0});
+        for (int i = 0; i < n; i++) {
+            hs[i + 1].first = (hs[i].first + 1LL * pw[i].first * s[i]) % MOD1;
+            hs[i + 1].second = (hs[i].second + 1LL * pw[i].second * s[i]) % MOD2;
+            rhs[i + 1].first = (rhs[i].first + 1LL * pw[i].first * s[n - 1 - i]) % MOD1;
+            rhs[i + 1].second = (rhs[i].second + 1LL * pw[i].second * s[n - 1 - i]) % MOD2;
+        }
+    }
+
+    pair<int, int> get(int l, int r) { // 1-indexed [l, r]
+        pair<int, int> ans;
+        ans.first = (1LL * (hs[r].first - hs[l - 1].first + MOD1) * inv_pw[l - 1].first) % MOD1;
+        ans.second = (1LL * (hs[r].second - hs[l - 1].second + MOD2) * inv_pw[l - 1].second) % MOD2;
+        return ans;
+    }
+
+    pair<int, int> get_rev(int l, int r) { // 1-indexed [l, r]
+        int rev_l = n - r + 1, rev_r = n - l + 1;
+        pair<int, int> ans;
+        ans.first = (1LL * (rhs[rev_r].first - rhs[rev_l - 1].first + MOD1) * inv_pw[rev_l - 1].first) % MOD1;
+        ans.second = (1LL * (rhs[rev_r].second - rhs[rev_l - 1].second + MOD2) * inv_pw[rev_l - 1].second) % MOD2;
+        return ans;
+    }
+
+    pair<int, int> get() { return get(1, n); }
+    bool is_pal(int l, int r) { return get(l, r) == get_rev(l, r); }
+};
+```
+
+##### z_function
+```cpp
+vector<int> z_func(auto& s) {
+    int n = s.size();
+    vector<int> z(n);
+    for (int i = 1, l = 0, r = 0; i < n; i++) {
+        if (i <= r) z[i] = min(z[i - l], r - i + 1);
+        while (i + z[i] < n && s[z[i]] == s[i + z[i]]) ++z[i];
+        if (i + z[i] - 1 > r) { l = i; r = i + z[i] - 1; }
+    }
+    return z;
+}
+```
